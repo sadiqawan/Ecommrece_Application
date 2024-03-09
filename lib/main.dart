@@ -1,8 +1,19 @@
 import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: 'AIzaSyBQRKdqFL_LkvESSCvsZA-eWQ3IMwXXZe0',
+          appId: '1:675125432554:android:0fae5953b493274d474793',
+          messagingSenderId: '675125432554',
+          projectId: 'ecommerecapp-d3828',
+          storageBucket: 'ecommerecapp-d3828.appspot.com'));
+
   runApp(const MyApp());
 }
 
@@ -13,23 +24,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Bagzz',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
+        fontFamily: GoogleFonts.playfairDisplay.toString(),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -37,4 +34,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

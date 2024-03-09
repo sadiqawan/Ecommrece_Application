@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "675125432554",
+    "project_id": "ecommerecapp-d3828",
+    "storage_bucket": "ecommerecapp-d3828.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:675125432554:android:0fae5953b493274d474793",
+        "android_client_info": {
+          "package_name": "com.example.ecommrece_application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQRKdqFL_LkvESSCvsZA-eWQ3IMwXXZe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
