@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
        ChangeNotifierProvider(create: (_) => LoginProvider())
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Bagzz',
         theme: ThemeData(
           fontFamily: GoogleFonts.playfairDisplay.toString(),
