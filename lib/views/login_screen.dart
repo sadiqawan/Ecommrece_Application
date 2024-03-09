@@ -1,5 +1,9 @@
+import 'package:ecommrece_application/controls/providers/auth_provider.dart';
+import 'package:ecommrece_application/views/home_screen.dart';
+import 'package:ecommrece_application/views/verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 import '../modes/custom_wedgits/custom_button.dart';
 
@@ -57,18 +61,39 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: 'Password',
                     prefixIcon: const Icon(Icons.lock_open_rounded),
                     suffixIcon: IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.remove_red_eye)),
+                        onPressed: () {},
+                        icon: const Icon(Icons.remove_red_eye)),
                     border: const OutlineInputBorder()),
               ),
               const Gap(16),
               Row(
                 children: [
                   Expanded(
-                      child: CustomButton(
-                          text: 'Login',
-                          backgroundColor: Colors.black,
-                          textStyle: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-                          onTap: () {})),
+                    child: Consumer<LoginProvider>(
+                      builder: (BuildContext context, LoginProvider value,
+                          Widget? child) {
+                        return CustomButton(
+                            text: 'Login',
+                            backgroundColor: Colors.black,
+                            textStyle: const TextStyle(color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            onTap: () {
+                              context.read<LoginProvider>().logIn(
+                                  emailC!.text.trim(), passwordC!.text.trim());
+                              value.emailVarify
+                                  ? Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(builder: (context) => const HomeScreen()))
+                                  : Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => const VerificationScreen()),
+                              );
+
+
+
+                            });
+                      },
+                    ),
+                  ),
+
                 ],
               ),
               const Gap(16),
@@ -78,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextButton(
                   onPressed: () {},
                   child: const Text('Do not have account? SingUp!  ')),
-              
+
               Image.asset('images/icon_image.jpg')
             ],
           ),

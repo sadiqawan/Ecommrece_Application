@@ -1,5 +1,8 @@
+import 'package:ecommrece_application/controls/providers/auth_provider.dart';
+import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import '../modes/custom_wedgits/custom_button.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -10,19 +13,21 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController? emailC, passwordC, nameC;
+  TextEditingController? emailC, passwordC, nameC, phoneC;
 
   @override
   void initState() {
     nameC = TextEditingController();
     emailC = TextEditingController();
     passwordC = TextEditingController();
+    phoneC = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     nameC?.dispose();
+    phoneC?.dispose();
     emailC?.dispose();
     passwordC?.dispose();
     super.dispose();
@@ -42,8 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Gap(70),
-              
+              const Gap(30),
               TextField(
                 controller: nameC,
                 decoration: const InputDecoration(
@@ -56,7 +60,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: emailC,
                 decoration: const InputDecoration(
                     hintText: 'Email',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.alternate_email),
+                    border: OutlineInputBorder()),
+              ),
+              const Gap(16),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: phoneC,
+                decoration: const InputDecoration(
+                    hintText: 'Phone No',
+                    prefixIcon: Icon(Icons.phone_android),
                     border: OutlineInputBorder()),
               ),
               const Gap(16),
@@ -67,7 +80,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: 'Password',
                     prefixIcon: const Icon(Icons.lock_open_rounded),
                     suffixIcon: IconButton(
-                        onPressed: () {}, icon: const Icon(Icons.remove_red_eye)),
+                        onPressed: () {},
+                        icon: const Icon(Icons.remove_red_eye)),
                     border: const OutlineInputBorder()),
               ),
               const Gap(16),
@@ -79,15 +93,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           backgroundColor: Colors.black,
                           textStyle: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
-                          onTap: () {})),
+                          onTap: () async {
+                            await context.read<LoginProvider>().signUp(
+                                emailC!.text.trim(),
+                                passwordC!.text.trim(),
+                                phoneC!.text.trim(),
+                                nameC!.text.trim());
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()));
+                          })),
                 ],
               ),
-              const Gap(16),
+              const Gap(10),
               TextButton(
                   onPressed: () {},
                   child: const Text('Already have account Login!')),
               Image.asset('images/icon_image.jpg')
-          
             ],
           ),
         ),
