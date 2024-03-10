@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import '../modes/custom_wedgits/home_screen_buildgrid_item.dart';
+
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
 
@@ -14,7 +16,46 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      drawer: Drawer(
+          child: ListView(
+        children: [
+          DrawerHeader(
+              child: Container(
+                  color: Colors.black,
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.shopping_basket_outlined,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        'bagzz',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+              ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home_filled),
+           title: Text('Home'),
+          ),
+          ListTile(
+            leading: Icon(Icons.phone),
+           title: Text('Contact'),
+          ),
+          ListTile(
+            leading: Icon(Icons.email_outlined),
+           title: Text('Email'),
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+           title: Text('LogOut'),
+          ),
+
+        ],
+      )),
       appBar: AppBar(
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.person_outlined))
@@ -31,10 +72,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
+                      width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.symmetric(horizontal: 5.0),
                       decoration: BoxDecoration(color: Colors.amber),
                       child: Text(
@@ -60,38 +98,22 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               scrollDirection: Axis.horizontal,
             ),
           ),
-          Expanded(
-            flex: 1,
-
-            child: GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              children: [
-                _buildGridItem(),
-                _buildGridItem(),
-                _buildGridItem(),
-                _buildGridItem(),
-              ],
-
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGridItem() {
-    return Container(
-      color: Color(0xFFF1F1F1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset('images/icon_image.jpg', height: 100),
-          Text('name'),
-          Text('shopNow'),
+          // Expanded(
+          //   flex: 1,
+          //   child: GridView.builder(
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: 2,
+          //       crossAxisSpacing: 10,
+          //       mainAxisSpacing: 10,
+          //     ),
+          //     itemCount: yourDataList.length, // Replace yourDataList with the list of data you want to display
+          //     itemBuilder: (BuildContext context, int index) {
+          //       // Replace HomeScreenBuildGridItem() with your widget to build individual grid items
+          //       return HomeScreenBuildGridItem(data: yourDataList[index]); // You need to pass the data to your grid item widget
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );
