@@ -1,28 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 
 class CustomerHomeProvider extends ChangeNotifier {
-  List  productList = [];
-  Future<void> productsData() async {
+  CollectionReference? productsRef;
+  List<DocumentSnapshot>? products;
+  // List to hold product documents
+
+  CustomerHomeProvider() {
+    // Initialize productsRef in the constructor
+    productsRef = FirebaseFirestore.instance.collection('products');
+  }
+
+  Future<void> fetchProducts() async {
     try {
-      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
-      // Example: Fetching data from a collection named 'labels'
-      QuerySnapshot querySnapshot = await firebaseFirestore.collection('products').get();
-
-      // Process the documents in the snapshot
-      List<QueryDocumentSnapshot> documents = querySnapshot.docs;
-      for (QueryDocumentSnapshot document in documents) {
-        // Access document fields using document.data()
-        Object? data = document.data();
-        // Do something with the data
-        print(data);
-        productList.add(data);
-      }
-
+      // Fetch product documents
+      final QuerySnapshot snapshot = await productsRef!.get();
+      products = snapshot.docs;
+      notifyListeners(); // Notify listeners about the change
     } catch (e) {
       // Handle errors
-      print('Error fetching data: $e');
+      debugPrint('Error fetching products: $e');
     }
   }
 }

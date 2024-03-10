@@ -1,4 +1,5 @@
 
+import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/views/home_screen.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:ecommrece_application/views/signup_screen.dart';
@@ -31,11 +32,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-       ChangeNotifierProvider(create: (_) => LoginProvider())
+       ChangeNotifierProvider(create: (_) => LoginProvider()),
+       ChangeNotifierProvider(create: (_) => CustomerHomeProvider()),
       ],
       child: MaterialApp(
+
         debugShowCheckedModeBanner: false,
         title: 'Bagzz',
+
         theme: ThemeData(
           fontFamily: GoogleFonts.playfairDisplay.toString(),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
