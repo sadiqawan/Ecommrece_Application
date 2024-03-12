@@ -20,6 +20,7 @@ class CustomerHomeScreen extends StatefulWidget {
 }
 
 class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +28,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     Provider.of<CustomerHomeProvider>(context, listen: false).fetchProducts();
     // Fetch brands data when the screen initializes
     Provider.of<CustomerHomeProvider>(context, listen: false).fetchBrands();
+    // Fetch promo data when the screen initializes
+    Provider.of<CustomerHomeProvider>(context, listen: false).fetchPromo();
+
   }
 
   @override
@@ -44,6 +48,60 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           padding: const EdgeInsets.all(13.0),
           child: Column(
             children: [
+
+              Consumer<CustomerHomeProvider>(
+                builder: (context, value, child) {
+                  if (value.promo == null || value.promo!.isEmpty) {
+                    return const SpinKitSpinningLines(color: Colors.white); // Return empty container if no products
+                  } else {
+                    return CarouselSlider(
+                      items: value.promo!.map((promo) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  margin:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration:
+                                  const BoxDecoration(color: Colors.black12),
+                                  child: Image.network(
+                                    promo['image'],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 20,
+                                  bottom: 10,
+                                  child:  Text(
+                                  ' ${promo['discreption'].toString()}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22,
+                                  ),
+                                ),
+                                ),
+
+
+                              ],
+                            );
+                          },
+                        );
+                      }).toList(),
+                      options: CarouselOptions(
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        reverse: false,
+                        autoPlay: true,
+                      )
+                      );
+                  }
+                },
+              ),
+              Gap(20),
+
+
               // Carousel Slider for product images
               Consumer<CustomerHomeProvider>(
                 builder: (context, value, child) {
@@ -186,7 +244,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   }
                 },
               ),
-              const Gap(15),
+              const Gap(20),
 
               Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -195,7 +253,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     onTap: () {}),
               ),
-              const Gap(15),
+              const Gap(20),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Align(
@@ -211,7 +269,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   ),
                 ),
               ),
-              const Gap(15),
+              const Gap(10),
 
               Consumer<CustomerHomeProvider>(
                 builder: (context, value, child) {
