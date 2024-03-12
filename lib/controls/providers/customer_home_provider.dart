@@ -6,12 +6,16 @@ import 'package:flutter/material.dart';
 
 class CustomerHomeProvider extends ChangeNotifier {
   CollectionReference? productsRef;
+  CollectionReference? brandsRef;
   List<DocumentSnapshot>? products;
+  List<DocumentSnapshot>? brands;
+
   // List to hold product documents
 
   CustomerHomeProvider() {
     // Initialize productsRef in the constructor
     productsRef = FirebaseFirestore.instance.collection('products');
+    brandsRef = FirebaseFirestore.instance.collection('brands');
   }
 
   Future<void> fetchProducts() async {
@@ -24,5 +28,20 @@ class CustomerHomeProvider extends ChangeNotifier {
       // Handle errors
       debugPrint('Error fetching products: $e');
     }
+  }
+
+
+  Future< void> fetchBrands () async{
+   try{
+     final QuerySnapshot  snapshot = await brandsRef!.get();
+     brands = snapshot.docs;
+     notifyListeners();
+
+   } catch (e){
+
+     print(e.toString());
+   }
+
+
   }
 }

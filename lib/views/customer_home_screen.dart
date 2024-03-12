@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,13 +25,18 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     super.initState();
     // Fetch product data when the screen initializes
     Provider.of<CustomerHomeProvider>(context, listen: false).fetchProducts();
+    // Fetch brands data when the screen initializes
+    Provider.of<CustomerHomeProvider>(context, listen: false).fetchBrands();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Customer Home'),
+        title: const Text(
+          'bagzz',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       drawer: const CustomDrawer(),
       body: SingleChildScrollView(
@@ -114,7 +120,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 builder: (context, provider, child) {
                   if (provider.products == null) {
                     return const Center(
-                      child: CircularProgressIndicator(),
+                      child: SpinKitSpinningLines(color: Colors.white),
                     ); // Show loading indicator while fetching data
                   } else if (provider.products!.isEmpty) {
                     return const Center(
@@ -191,20 +197,105 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               ),
               const Gap(15),
               Padding(
-                padding:  const EdgeInsets.all(15.0),
-                child:  Align(
+                padding: const EdgeInsets.all(15.0),
+                child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Shop by categories',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      fontFamily: GoogleFonts.playfairDisplay.toString()
-                    ),
+                        fontWeight: FontWeight.bold,
+                        backgroundColor: Colors.white24,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 25,
+                        fontFamily: GoogleFonts.playfairDisplay.toString()),
                   ),
                 ),
               ),
+              const Gap(15),
 
+              Consumer<CustomerHomeProvider>(
+                builder: (context, value, child) {
+                  if (value.brands == null) {
+                    return const Center(
+                      child: SpinKitSpinningLines(color: Colors.white),
+                    );
+                  } else if (value.brands!.isEmpty) {
+                    return const Center(
+                      child: Text('No Data Found'),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: value.brands!.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemBuilder: (context, index) {
+                          final brand = value.brands![index];
+                          return Center(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  color: Colors.black12,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 150,
+                                        width: 130,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: NetworkImage(brand['image']),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    color: Colors.black.withOpacity(0.5),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                      vertical: 4.0,
+                                    ),
+                                    child: Text(
+                                      brand['name'].toString(),
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
+              const Gap(15),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: CustomButton(
+                    text: 'BROWSE ALL CATEGORIES',
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    onTap: () {}),
+              ),
+              const Gap(15),
             ],
           ),
         ),
