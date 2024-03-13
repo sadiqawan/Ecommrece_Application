@@ -10,7 +10,7 @@ class CustomerHomeProvider extends ChangeNotifier {
   List<DocumentSnapshot>? products;
   List<DocumentSnapshot>? brands;
   List<DocumentSnapshot>? promo;
-  List<int> favoriteItems = [];
+
 
   // List to hold product documents
 
@@ -53,13 +53,5 @@ class CustomerHomeProvider extends ChangeNotifier {
     }
   }
 
-  void setFavoriteItem(int index) {
-    favoriteItems.add(index);
-    notifyListeners();
-  }
 
-  void removeFavoriteItem(int index) {
-    favoriteItems.remove(index);
-    notifyListeners();
-  }
 }

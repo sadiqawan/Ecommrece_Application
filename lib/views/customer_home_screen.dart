@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
+import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -184,18 +185,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       child: Text('No products found'),
                     ); // Show message if there are no products
                   } else {
-                    return Padding(
+                    return  Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: GridView.builder(
                         shrinkWrap: true,
-                        // Ensure GridView takes only required space
                         physics: const NeverScrollableScrollPhysics(),
-                        // Disable GridView's scrolling
                         itemCount: provider.products!.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 200,
-                          // Adjust as per your preference
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
                         ),
@@ -204,32 +201,6 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           return Center(
                             child: Stack(
                               children: [
-                                Positioned(
-                                    left: 100,
-                                    right: 0,
-                                    child: Consumer<CustomerHomeProvider>(
-                                        builder: (context, value, child) {
-                                      return IconButton(
-                                          onPressed: () {
-                                            if (value.favoriteItems
-                                                .contains(index)) {
-                                              context
-                                                  .read<CustomerHomeProvider>()
-                                                  .setFavoriteItem(index);
-                                            } else {
-                                              context
-                                                  .read<CustomerHomeProvider>()
-                                                  .removeFavoriteItem(index);
-                                            }
-                                          },
-                                          icon: Icon(
-                                          value.favoriteItems.contains(index)
-                                          ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          )
-                                      );}
-                                    ),
-                                ),
                                 Container(
                                   color: Colors.black12,
                                   child: Column(
@@ -239,18 +210,43 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                         height: 120,
                                       ),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             ' ${product['name'].toString()}',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
                                           ),
                                         ],
                                       ),
                                     ],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Consumer<FavouriteProvider>(
+                                    builder: (context, value, child) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          if (value.favouriteItems.contains(index)) {
+                                            context.read<FavouriteProvider>().removeFavouriteItem(index);
+                                          } else {
+                                            context.read<FavouriteProvider>().setFavouriteItem(index);
+                                          }
+                                        },
+                                        icon: Icon(
+                                          value.favouriteItems.contains(index)
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: value.favouriteItems.contains(index)
+                                              ? Colors.black // Set the color to red if the item is favorited
+                                              : null,
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ],
@@ -259,6 +255,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         },
                       ),
                     );
+
                   }
                 },
               ),

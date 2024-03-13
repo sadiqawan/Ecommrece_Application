@@ -1,5 +1,6 @@
 
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
+import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/views/home_screen.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       providers: [
        ChangeNotifierProvider(create: (_) => LoginProvider()),
        ChangeNotifierProvider(create: (_) => CustomerHomeProvider()),
+       ChangeNotifierProvider(create: (_) => FavouriteProvider()),
       ],
       child: MaterialApp(
 
