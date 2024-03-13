@@ -19,6 +19,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
   bool emailVerified = false;
   Timer? timer;
 
+  @override
   void initState() {
     FirebaseAuth.instance.currentUser!.sendEmailVerification();
 

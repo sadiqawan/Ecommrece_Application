@@ -46,8 +46,7 @@ class MyApp extends StatelessWidget {
         ),
         home:
 
-        (FirebaseAuth.instance != null &&
-            FirebaseAuth.instance.currentUser!.emailVerified)
+        (FirebaseAuth.instance.currentUser!.emailVerified)
             ? const HomeScreen()
             : const LoginScreen(),
       )

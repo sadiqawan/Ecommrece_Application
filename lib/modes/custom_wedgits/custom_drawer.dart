@@ -26,19 +26,19 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.home_filled),
               title: Text('Home'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.phone),
               title: Text('Contact'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.email_outlined),
               title: Text('Email'),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.logout),
               title: Text('LogOut'),
             ),

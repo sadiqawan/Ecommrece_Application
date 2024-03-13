@@ -14,23 +14,21 @@ class LoginProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
-      if (userCredential != null) {
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-        await firebaseFirestore.collection('user').doc(userCredential.user!.uid).set({
-          'name': name.trim(),
-          'email': email.trim(),
-          'phone': phone.trim(),
-          'password': password.trim(),
-          'photo': null
-        });
+      await firebaseFirestore.collection('user').doc(userCredential.user!.uid).set({
+        'name': name.trim(),
+        'email': email.trim(),
+        'phone': phone.trim(),
+        'password': password.trim(),
+        'photo': null
+      });
 
-        Fluttertoast.showToast(
-          msg: 'Successfully Registered',
-          backgroundColor: Colors.green,
-        );
-      }
-    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'Successfully Registered',
+        backgroundColor: Colors.green,
+      );
+        } catch (e) {
       Fluttertoast.showToast(
         msg: 'Registration Failed: $e',
         backgroundColor: Colors.red,
