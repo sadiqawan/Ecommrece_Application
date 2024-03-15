@@ -2,7 +2,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/views/customer_home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import '../controls/providers/shopping_card_provider.dart';
 import 'customer_favourite_screen.dart';
 import 'customer_search_screen.dart';
 import 'customer_shopping_screen.dart';
@@ -77,77 +79,88 @@ class _HomeScreenState extends State<HomeScreen> {
         return Padding(
           padding: const EdgeInsets.all(13.0),
           child: Consumer<FavouriteProvider>(builder: (context, value, child){
-            return SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: ListView.builder(
-                  itemCount: value.favouriteItems.length,
-                  itemBuilder: (context, index){
+            if (value.favouriteItems.isEmpty){
+              return const Center(
+                heightFactor: 25,
+                child: Text(
+                  'No item added to favourite',
+                  style: TextStyle(fontSize: 20),
+                ),
+              );
+            } else{
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: ListView.builder(
+                    itemCount: value.favouriteItems.length,
+                    itemBuilder: (context, index){
 
-                    return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                // color: Colors.black,
-                                height: 100,
-                                width: 100,
-                                child: Image.network(value.favouriteItems[index].image),
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  // color: Colors.black,
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.network(value.favouriteItems[index].image),
 
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    value.favouriteItems[index].name,
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const    SizedBox(
-                                    height: 5,
-                                  ),
-
-                                  const  Text(
-                                    'Wallet with chain',
-                                    style: TextStyle(
-                                      fontSize: 10,
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      value.favouriteItems[index].name,
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      context.read<FavouriteProvider>().removeFavouriteItem(index);
-                                    },
-                                    child: const Text(
-                                      'Remove',
+                                    const    SizedBox(
+                                      height: 5,
+                                    ),
+
+                                    const  Text(
+                                      'Wallet with chain',
                                       style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        decoration: TextDecoration.underline,
+                                        fontSize: 10,
                                       ),
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        context.read<FavouriteProvider>().removeFavouriteItem(index);
+                                      },
+                                      child: const Text(
+                                        'Remove',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ),
 
 
-                                ],
-                              ),
-                            ],
-                          ),
+                                  ],
+                                ),
+                              ],
+                            ),
 
-                        ],
-                      ),
-                    );
-                  }),
-            );
+                          ],
+                        ),
+                      );
+                    }),
+              );
+            }
+
           }),
         );
       },
@@ -157,24 +170,94 @@ class _HomeScreenState extends State<HomeScreen> {
   void cardShowBottomSheet(BuildContext context) {
 
     showModalBottomSheet(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
 
       context: context,
       builder: (BuildContext bc) {
-        return Container(
-          child: Column(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.album,color: Colors.white,),
-                title: Text('Option 1',style: TextStyle(color: Colors.white),),
-                onTap: () => {}, // Add your functionality here
-              ),
-              ListTile(
-                leading: Icon(Icons.album,color: Colors.white,),
-                title: Text('Option 2',style: TextStyle(color: Colors.white)),
-                onTap: () => {}, // Add your functionality here
-              ),
-            ],
+        return Padding(
+          padding: const EdgeInsets.all(13.0),
+          child:Consumer<ShoppingCardProvider>(
+            builder: (context, value, child) {
+              if (value.cardItems.isEmpty) {
+                return const Center(
+                  heightFactor: 25,
+                  child: Text(
+                    'Card is empty',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                );
+              } else {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: ListView.builder(
+                    itemCount: value.cardItems.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.network(
+                                    value.cardItems[index].image,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      value.cardItems[index].name,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    const Text(
+                                      'Wallet with chain',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                    TextButton(onPressed: () {
+                                      context
+                                          .read<ShoppingCardProvider>()
+                                          .removeCardItems(index);
+                                      Fluttertoast.showToast(
+                                        msg: 'Removed From Cart',
+                                        gravity: ToastGravity.SNACKBAR,
+                                        timeInSecForIosWeb: 1,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0,
+                                      );
+                                    }, child: const Text('Remove item')),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
         );
       },

@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FavouriteItem {
-  final int index;
-  final String image;
-  final String name;
+import '../../modes/fovourite_items_model.dart';
 
-  FavouriteItem({
-    required this.index,
-    required this.image,
-    required this.name,
-  });
-}
 
 class FavouriteProvider extends ChangeNotifier {
   List<FavouriteItem> favouriteItems = [];

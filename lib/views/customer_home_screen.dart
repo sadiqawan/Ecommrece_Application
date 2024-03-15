@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
+import 'package:ecommrece_application/views/customer_shopping_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,6 +12,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../controls/providers/shopping_card_provider.dart';
 import '../modes/custom_wedgits/custom_drawer.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -110,14 +112,13 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   } else {
                     return CarouselSlider(
                       items: value.products!.map((product) {
+                        int index = value.products!.indexOf(product); // Get the index of the current product
                         return Builder(
                           builder: (BuildContext context) {
                             return Container(
                               width: MediaQuery.of(context).size.width,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration:
-                                  const BoxDecoration(color: Colors.black12),
+                              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                              decoration: const BoxDecoration(color: Colors.black12),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -125,7 +126,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     product['image'],
                                     height: 120,
                                   ),
-                                  const Gap(8),
+                                  const SizedBox(height: 8),
                                   Text(
                                     ' ${product['name'].toString()}',
                                     style: const TextStyle(
@@ -133,9 +134,16 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       fontSize: 22,
                                     ),
                                   ),
-                                  const Gap(5),
+                                  const SizedBox(height: 5),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context.read<ShoppingCardProvider>().setCardItems(
+                                        index, // Use the index obtained above
+                                        product['image'],
+                                        product['name'].toString(),
+                                      );
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CustomerShoppingScreen()));
+                                    },
                                     child: const Text(
                                       'SHOP NOW',
                                       style: TextStyle(
@@ -161,8 +169,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         enableInfiniteScroll: true,
                         autoPlay: true,
                         autoPlayInterval: const Duration(seconds: 3),
-                        autoPlayAnimationDuration:
-                            const Duration(milliseconds: 800),
+                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
                         autoPlayCurve: Curves.fastOutSlowIn,
                         enlargeCenterPage: true,
                         enlargeStrategy: CenterPageEnlargeStrategy.scale,
@@ -171,6 +178,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   }
                 },
               ),
+
               const Gap(20),
 
 
