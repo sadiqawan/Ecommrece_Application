@@ -44,65 +44,65 @@ class _CustomerFavoriteScreenState extends State<CustomerFavoriteScreen> {
                 itemCount: value.favouriteItems.length,
                   itemBuilder: (context, index){
 
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          // color: Colors.black,
-                          height: 100,
-                          width: 100,
-                          child: Text(index.toString()),
-              
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'title',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'subtitle',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              'explain',
-                              style: TextStyle(
-                                fontSize: 10,
+
+                return Card(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            // color: Colors.black,
+                            height: 100,
+                            width: 100,
+                            child: Image.network(value.favouriteItems[index].image),
+                                
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                value.favouriteItems[index].name,
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                'Remove',
+                           const    SizedBox(
+                                height: 5,
+                              ),
+                             
+                             const  Text(
+                                'Wallet with chain',
                                 style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  decoration: TextDecoration.underline,
+                                  fontSize: 10,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  context.read<FavouriteProvider>().removeFavouriteItem(index);
+                                },
+                                child: const Text(
+                                  'Remove',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 );
               }),
             );

@@ -71,24 +71,84 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void favouriteShowBottomSheet(BuildContext context) {
     showModalBottomSheet(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       context: context,
       builder: (BuildContext bc) {
         return Padding(
           padding: const EdgeInsets.all(13.0),
-          child: Column(
-            children: [
-              Consumer<FavouriteProvider>(
-                builder: (context, value, child) {
-                  return ListTile(
-                    leading: Icon(Icons.album,color: Colors.white,),
-                    title: Text('Option 1',style: TextStyle(color: Colors.white),),
-                    onTap: () => {}, // Add your functionality here
-                  );
-                },
-              ),
-            ],
-          ),
+          child: Consumer<FavouriteProvider>(builder: (context, value, child){
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                  itemCount: value.favouriteItems.length,
+                  itemBuilder: (context, index){
+
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                // color: Colors.black,
+                                height: 100,
+                                width: 100,
+                                child: Image.network(value.favouriteItems[index].image),
+
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    value.favouriteItems[index].name,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const    SizedBox(
+                                    height: 5,
+                                  ),
+
+                                  const  Text(
+                                    'Wallet with chain',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      context.read<FavouriteProvider>().removeFavouriteItem(index);
+                                    },
+                                    child: const Text(
+                                      'Remove',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+
+
+                                ],
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    );
+                  }),
+            );
+          }),
         );
       },
     );
