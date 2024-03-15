@@ -1,6 +1,7 @@
 import 'package:ecommrece_application/controls/providers/auth_provider.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import '../modes/custom_wedgits/custom_button.dart';
@@ -102,12 +103,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => const LoginScreen()));
+                            Fluttertoast.showToast(msg: 'Successfully Register');
                           })),
                 ],
               ),
               const Gap(10),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: const Text('Already have account Login!')),
               Image.asset('images/icon_image.jpg')
             ],

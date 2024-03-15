@@ -57,4 +57,19 @@ class LoginProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void logOut (){
+    FirebaseAuth.instance.signOut();
+  }
+
+  void forgotPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      // Password reset email sent successfully
+      print('Password reset email sent to $email');
+    } catch (error) {
+      // Handle any errors that occurred during the password reset process
+      print('Failed to send password reset email: $error');
+    }
+  }
 }

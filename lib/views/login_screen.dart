@@ -1,8 +1,10 @@
 import 'package:ecommrece_application/controls/providers/auth_provider.dart';
 import 'package:ecommrece_application/views/home_screen.dart';
+import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:ecommrece_application/views/verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
@@ -108,10 +110,28 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const Gap(16),
               TextButton(
-                  onPressed: () {}, child: const Text('Forgot Password ? ')),
+                onPressed: () {
+                  String? email = emailC?.text.trim(); // Get the trimmed email value
+                  if (email == null || email.isEmpty) {
+                    Fluttertoast.showToast(
+                      msg: 'Failed to send: Email is empty',
+                      backgroundColor: Colors.red,
+                    );
+                  } else {
+                    context.read<LoginProvider>().forgotPassword(email);
+                    Fluttertoast.showToast(
+                      msg: 'Email sent successfully',
+                    );
+                  }
+                },
+                child: const Text('Forgot Password ? '),
+              ),
+
               const Gap(16),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                  },
                   child: const Text('Do not have account? SingUp!  ')),
               Image.asset('images/icon_image.jpg')
             ],

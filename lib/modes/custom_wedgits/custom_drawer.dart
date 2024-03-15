@@ -1,4 +1,7 @@
+import 'package:ecommrece_application/controls/providers/auth_provider.dart';
+import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -26,9 +29,10 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.home_filled),
-              title: Text('Home'),
+             ListTile(
+              onTap: (){ Navigator.pop(context);},
+              leading: const  Icon(Icons.home_filled),
+              title: const Text('Home'),
             ),
             const ListTile(
               leading: Icon(Icons.phone),
@@ -38,9 +42,14 @@ class CustomDrawer extends StatelessWidget {
               leading: Icon(Icons.email_outlined),
               title: Text('Email'),
             ),
-            const ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('LogOut'),
+             ListTile(
+               onTap: (){
+                 context.read<LoginProvider>().logOut();
+                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
+
+               },
+              leading: const  Icon(Icons.logout),
+              title: const Text('LogOut'),
             ),
 
           ],
