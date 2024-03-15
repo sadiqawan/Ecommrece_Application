@@ -173,7 +173,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               ),
               const Gap(20),
 
-              // Add some space between Carousel Slider and GridView
+
               Consumer<CustomerHomeProvider>(
                 builder: (context, provider, child) {
                   if (provider.products == null) {
@@ -229,23 +229,30 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                   right: 0,
                                   child: Consumer<FavouriteProvider>(
                                     builder: (context, value, child) {
-                                      return IconButton(
-                                        onPressed: () {
-                                          if (value.favouriteItems.contains(index)) {
-                                            context.read<FavouriteProvider>().removeFavouriteItem(index);
-                                          } else {
-                                            context.read<FavouriteProvider>().setFavouriteItem(index, product['image'], product['name'] );
-                                          }
+                                      return Consumer<FavouriteProvider>(
+                                        builder: (context, value, child) {
+                                          return IconButton(
+                                            onPressed: () {
+                                              if (value.favouriteItems.any((item) => item.index == index)) {
+                                                context.read<FavouriteProvider>().removeFavouriteItem(index);
+                                              } else {
+                                                // Ensure to pass the correct image and name parameters
+                                                context.read<FavouriteProvider>().setFavouriteItem(index, product['image'], product['name']);
+                                              }
+                                            },
+                                            icon: Icon(
+                                              value.favouriteItems.any((item) => item.index == index)
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_border,
+                                              color: value.favouriteItems.any((item) => item.index == index)
+                                                  ? Colors.black
+                                                  : null,
+                                            ),
+                                          );
                                         },
-                                        icon: Icon(
-                                          value.favouriteItems.contains(index)
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: value.favouriteItems.contains(index)
-                                              ? Colors.black // Set the color to red if the item is favorited
-                                              : null,
-                                        ),
                                       );
+
+
                                     },
                                   ),
                                 ),

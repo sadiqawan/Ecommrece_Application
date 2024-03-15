@@ -70,96 +70,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void favouriteShowBottomSheet(BuildContext context) {
-
     showModalBottomSheet(
-
       backgroundColor: Colors.black,
-
       context: context,
       builder: (BuildContext bc) {
         return Padding(
           padding: const EdgeInsets.all(13.0),
-            child: Column(
-              children: [
-                Consumer<FavouriteProvider>(
-                  builder: (context, value, child) {
-                    return ListView.builder(
-                      itemCount: value.favouriteItems.length,
-                      itemBuilder: (context, index) {
-                        var item = value.favouriteItems[index] as Map<String, dynamic>; // Accessing the current item
-
-                        return Row(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-
-                              ),
-                              child: Image.network(item['image'] as String),
-                            ),
-                            const SizedBox(width: 15),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 5),
-                                Text(
-                                  item['name'], // Displaying title from the current item
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                // Text(
-                                //   item.subtitle, // Displaying subtitle from the current item
-                                //   style: TextStyle(
-                                //     fontSize: 20,
-                                //     fontWeight: FontWeight.bold,
-                                //     color: Colors.white,
-                                //   ),
-                                // ),
-                                // Text(
-                                //   item.explanation, // Displaying explanation from the current item
-                                //   style: TextStyle(
-                                //     fontSize: 10,
-                                //     color: Colors.white,
-                                //   ),
-                                // ),
-                                SizedBox(height: 5),
-                                TextButton(
-                                  onPressed: () {
-                                    // Implement remove functionality here
-                                  },
-                                  child: const Text(
-                                    'Remove',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            )
-
-        );;
+          child: Column(
+            children: [
+              Consumer<FavouriteProvider>(
+                builder: (context, value, child) {
+                  return ListTile(
+                    leading: Icon(Icons.album,color: Colors.white,),
+                    title: Text('Option 1',style: TextStyle(color: Colors.white),),
+                    onTap: () => {}, // Add your functionality here
+                  );
+                },
+              ),
+            ],
+          ),
+        );
       },
     );
   }
+
   void cardShowBottomSheet(BuildContext context) {
 
     showModalBottomSheet(

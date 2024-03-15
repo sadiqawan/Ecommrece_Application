@@ -22,15 +22,7 @@ class CustomerFavoriteScreen extends StatefulWidget {
 
 class _CustomerFavoriteScreenState extends State<CustomerFavoriteScreen> {
   @override
-  void initState() {
-    super.initState();
-    // Fetch product data when the screen initializes
-    Provider.of<CustomerHomeProvider>(context, listen: false).fetchProducts();
-    // Fetch brands data when the screen initializes
-    Provider.of<CustomerHomeProvider>(context, listen: false).fetchBrands();
-    // Fetch promo data when the screen initializes
-    Provider.of<CustomerHomeProvider>(context, listen: false).fetchPromo();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,320 +37,76 @@ class _CustomerFavoriteScreenState extends State<CustomerFavoriteScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(13.0),
-          child: Column(
-            children: [
-              Consumer<CustomerHomeProvider>(
-                builder: (context, value, child) {
-                  if (value.promo == null || value.promo!.isEmpty) {
-                    return const SpinKitSpinningLines(
-                        color: Colors
-                            .white); // Return empty container if no products
-                  } else {
-                    return Column(
+          child: Consumer<FavouriteProvider>(builder: (context, value, child){
+            return SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                itemCount: value.favouriteItems.length,
+                  itemBuilder: (context, index){
+
+                return Column(
+                  children: [
+                    Row(
                       children: [
-
-                        Row(
+                        Container(
+                          // color: Colors.black,
+                          height: 100,
+                          width: 100,
+                          child: Text(index.toString()),
+              
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              color: Colors.black,
-                              height: 100,
-                              width: 100,
+                            Text(
+                              'title',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
                             ),
-                        const   SizedBox(width: 10,),
-                            Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('title', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                SizedBox(height: 5,),
-                                Text('subtitle', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                                Text('explain', style: TextStyle(fontSize: 10,),),
-                                SizedBox(height: 5,),
-                                TextButton(onPressed: (){},child: const  Text('Remove', style: TextStyle(
-                                  color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18,  decoration: TextDecoration.underline,
-                                ),),)
-                                
-
-                              ],
+                            SizedBox(
+                              height: 5,
                             ),
+                            Text(
+                              'subtitle',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'explain',
+                              style: TextStyle(
+                                fontSize: 10,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text(
+                                'Remove',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            )
                           ],
-                        )
+                        ),
                       ],
-                    );
-                  }
-                },
-              ),
-              // const Gap(20),
-              //
-              // // Carousel Slider for product images
-              // Consumer<CustomerHomeProvider>(
-              //   builder: (context, value, child) {
-              //     if (value.products == null || value.products!.isEmpty) {
-              //       return const SizedBox(); // Return empty container if no products
-              //     } else {
-              //       return CarouselSlider(
-              //         items: value.products!.map((product) {
-              //           return Builder(
-              //             builder: (BuildContext context) {
-              //               return Container(
-              //                 width: MediaQuery.of(context).size.width,
-              //                 margin:
-              //                 const EdgeInsets.symmetric(horizontal: 5.0),
-              //                 decoration:
-              //                 const BoxDecoration(color: Colors.black12),
-              //                 child: Column(
-              //                   mainAxisAlignment: MainAxisAlignment.center,
-              //                   children: [
-              //                     Image.network(
-              //                       product['image'],
-              //                       height: 120,
-              //                     ),
-              //                     const Gap(8),
-              //                     Text(
-              //                       ' ${product['name'].toString()}',
-              //                       style: const TextStyle(
-              //                         fontWeight: FontWeight.bold,
-              //                         fontSize: 22,
-              //                       ),
-              //                     ),
-              //                     const Gap(5),
-              //                     TextButton(
-              //                       onPressed: () {},
-              //                       child: const Text(
-              //                         'SHOP NOW',
-              //                         style: TextStyle(
-              //                           fontWeight: FontWeight.bold,
-              //                           decoration: TextDecoration.underline,
-              //                           fontSize: 17,
-              //                           letterSpacing: 2,
-              //                           color: Colors.black,
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ],
-              //                 ),
-              //               );
-              //             },
-              //           );
-              //         }).toList(),
-              //         options: CarouselOptions(
-              //           height: 250,
-              //           aspectRatio: 16 / 9,
-              //           viewportFraction: 0.8,
-              //           initialPage: 0,
-              //           enableInfiniteScroll: true,
-              //           autoPlay: true,
-              //           autoPlayInterval: const Duration(seconds: 3),
-              //           autoPlayAnimationDuration:
-              //           const Duration(milliseconds: 800),
-              //           autoPlayCurve: Curves.fastOutSlowIn,
-              //           enlargeCenterPage: true,
-              //           enlargeStrategy: CenterPageEnlargeStrategy.scale,
-              //         ),
-              //       );
-              //     }
-              //   },
-              // ),
-              // const Gap(20),
-              //
-              // // Add some space between Carousel Slider and GridView
-              // Consumer<CustomerHomeProvider>(
-              //   builder: (context, provider, child) {
-              //     if (provider.products == null) {
-              //       return const Center(
-              //         child: SpinKitSpinningLines(color: Colors.white),
-              //       ); // Show loading indicator while fetching data
-              //     } else if (provider.products!.isEmpty) {
-              //       return const Center(
-              //         child: Text('No products found'),
-              //       ); // Show message if there are no products
-              //     } else {
-              //       return  Padding(
-              //         padding: const EdgeInsets.all(15.0),
-              //         child: GridView.builder(
-              //           shrinkWrap: true,
-              //           physics: const NeverScrollableScrollPhysics(),
-              //           itemCount: provider.products!.length,
-              //           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              //             maxCrossAxisExtent: 200,
-              //             mainAxisSpacing: 10,
-              //             crossAxisSpacing: 10,
-              //           ),
-              //           itemBuilder: (context, index) {
-              //             final product = provider.products![index];
-              //             return Center(
-              //               child: Stack(
-              //                 children: [
-              //                   Container(
-              //                     color: Colors.black12,
-              //                     child: Column(
-              //                       children: [
-              //                         Image.network(
-              //                           product['image'],
-              //                           height: 120,
-              //                         ),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.center,
-              //                           children: [
-              //                             Text(
-              //                               ' ${product['name'].toString()}',
-              //                               style: const TextStyle(
-              //                                 fontWeight: FontWeight.bold,
-              //                                 fontSize: 15,
-              //                               ),
-              //                             ),
-              //                           ],
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                   Positioned(
-              //                     top: 0,
-              //                     right: 0,
-              //                     child: Consumer<FavouriteProvider>(
-              //                       builder: (context, value, child) {
-              //                         return IconButton(
-              //                           onPressed: () {
-              //                             if (value.favouriteItems.contains(index)) {
-              //                               context.read<FavouriteProvider>().removeFavouriteItem(index);
-              //                             } else {
-              //                               context.read<FavouriteProvider>().setFavouriteItem(index);
-              //                             }
-              //                           },
-              //                           icon: Icon(
-              //                             value.favouriteItems.contains(index)
-              //                                 ? Icons.favorite
-              //                                 : Icons.favorite_border,
-              //                             color: value.favouriteItems.contains(index)
-              //                                 ? Colors.black // Set the color to red if the item is favorited
-              //                                 : null,
-              //                           ),
-              //                         );
-              //                       },
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             );
-              //           },
-              //         ),
-              //       );
-              //
-              //     }
-              //   },
-              // ),
-              // const Gap(20),
-              //
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: CustomButton(
-              //       text: 'CHECK ALL LATEST',
-              //       textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              //       onTap: () {}),
-              // ),
-              // const Gap(20),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: Align(
-              //     alignment: Alignment.centerLeft,
-              //     child: Text(
-              //       'Shop by categories',
-              //       style: TextStyle(
-              //           fontWeight: FontWeight.bold,
-              //           backgroundColor: Colors.white24,
-              //           fontStyle: FontStyle.italic,
-              //           fontSize: 25,
-              //           fontFamily: GoogleFonts.playfairDisplay.toString()),
-              //     ),
-              //   ),
-              // ),
-              // const Gap(10),
-              //
-              // Consumer<CustomerHomeProvider>(
-              //   builder: (context, value, child) {
-              //     if (value.brands == null) {
-              //       return const Center(
-              //         child: SpinKitSpinningLines(color: Colors.white),
-              //       );
-              //     } else if (value.brands!.isEmpty) {
-              //       return const Center(
-              //         child: Text('No Data Found'),
-              //       );
-              //     } else {
-              //       return Padding(
-              //         padding: const EdgeInsets.all(10.0),
-              //         child: GridView.builder(
-              //           shrinkWrap: true,
-              //           physics: const NeverScrollableScrollPhysics(),
-              //           itemCount: value.brands!.length,
-              //           gridDelegate:
-              //           const SliverGridDelegateWithMaxCrossAxisExtent(
-              //             maxCrossAxisExtent: 200,
-              //             mainAxisSpacing: 8,
-              //             crossAxisSpacing: 8,
-              //           ),
-              //           itemBuilder: (context, index) {
-              //             final brand = value.brands![index];
-              //             return Center(
-              //               child: Stack(
-              //                 children: [
-              //                   Container(
-              //                     color: Colors.black12,
-              //                     child: Column(
-              //                       children: [
-              //                         Container(
-              //                           height: 150,
-              //                           width: 130,
-              //                           decoration: BoxDecoration(
-              //                             image: DecorationImage(
-              //                               image: NetworkImage(brand['image']),
-              //                               fit: BoxFit.cover,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                   Positioned(
-              //                     left: 0,
-              //                     right: 0,
-              //                     bottom: 0,
-              //                     child: Container(
-              //                       color: Colors.black.withOpacity(0.5),
-              //                       padding: const EdgeInsets.symmetric(
-              //                         horizontal: 8.0,
-              //                         vertical: 4.0,
-              //                       ),
-              //                       child: Text(
-              //                         brand['name'].toString(),
-              //                         maxLines: 2,
-              //                         style: const TextStyle(
-              //                           color: Colors.white,
-              //                           fontWeight: FontWeight.bold,
-              //                         ),
-              //                       ),
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //             );
-              //           },
-              //         ),
-              //       );
-              //     }
-              //   },
-              // ),
-              // const Gap(15),
-              // Padding(
-              //   padding: const EdgeInsets.all(15.0),
-              //   child: CustomButton(
-              //       text: 'BROWSE ALL CATEGORIES',
-              //       textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              //       onTap: () {}),
-              // ),
-              // const Gap(15),
-            ],
-          ),
+                    )
+                  ],
+                );
+              }),
+            );
+          })
         ),
       ),
     );
