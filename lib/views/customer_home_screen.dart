@@ -234,7 +234,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                           if (value.favouriteItems.contains(index)) {
                                             context.read<FavouriteProvider>().removeFavouriteItem(index);
                                           } else {
-                                            context.read<FavouriteProvider>().setFavouriteItem(index);
+                                            context.read<FavouriteProvider>().setFavouriteItem(index, product['image'], product['name'] );
                                           }
                                         },
                                         icon: Icon(

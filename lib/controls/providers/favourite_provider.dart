@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 
-class FavouriteProvider extends ChangeNotifier {
-  List<int> favouriteItems = [];
+class FavouriteItem {
+  final int index;
+  final String image;
+  final String name;
 
-  void setFavouriteItem(int index) {
-    favouriteItems.add(index);
+  FavouriteItem({
+    required this.index,
+    required this.image,
+    required this.name,
+  });
+}
+
+class FavouriteProvider extends ChangeNotifier {
+  List<FavouriteItem> favouriteItems = [];
+
+  void setFavouriteItem(int index, String image, String name) {
+    favouriteItems.add(FavouriteItem(index: index, image: image, name: name));
     notifyListeners();
   }
 
   void removeFavouriteItem(int index) {
-    favouriteItems.remove(index);
+    favouriteItems.removeWhere((item) => item.index == index);
     notifyListeners();
   }
 }
