@@ -3,6 +3,7 @@ import 'package:ecommrece_application/controls/providers/customer_home_provider.
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
 import 'package:ecommrece_application/views/customer_shopping_screen.dart';
+import 'package:ecommrece_application/views/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -42,8 +43,12 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           'bagzz',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [IconButton(onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ProfileScreen()));
+        }, icon: const Icon(Icons.person,size: 45,)), const SizedBox(width: 10,)],
       ),
       drawer: const CustomDrawer(),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(13.0),

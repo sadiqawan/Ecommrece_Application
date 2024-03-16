@@ -10,9 +10,9 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    Timer(const Duration(seconds:2), () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=>const HomeScreen()));
+    Timer(const Duration(seconds: 2), () {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeScreen()));
     });
     return Scaffold(
       body: SizedBox(
@@ -22,7 +22,10 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('images/icon_image.jpg'),
-            const SpinKitSpinningLines(color: Colors.black, size: 80,)
+            const SpinKitSpinningLines(
+              color: Colors.black,
+              size: 80,
+            )
           ],
         ),
       ),
