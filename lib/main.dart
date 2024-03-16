@@ -1,8 +1,8 @@
 
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
-import 'package:ecommrece_application/views/home_screen.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
+import 'package:ecommrece_application/views/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
             }
             final user = snapshot.data;
             if (user != null && user.emailVerified) {
-              return const HomeScreen();
+              return const SplashScreen();
             } else {
               return const LoginScreen();
             }
