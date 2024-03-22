@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -149,16 +150,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            ProfileNameContainer(text: 'Name: ${userSnapshot!['name']}'),
-            ProfileNameContainer(text: 'Email: ${userSnapshot!['email']}'),
-            ProfileNameContainer(text: 'Contact: ${userSnapshot!['phone']}'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ProfileNameContainer(text: 'Name: ${userSnapshot?['name'] ?? ''}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ProfileNameContainer(text: 'Email: ${userSnapshot?['email'] ?? ''}'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ProfileNameContainer(text: 'Contact: ${userSnapshot?['phone'] ?? ''}'),
+            ),
             const SizedBox(height: 20),
             InkWell(
               onTap: () async {
-
                 await FirebaseAuth.instance.currentUser!.delete();
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
                   return const LoginScreen();
                 }));
               },
@@ -183,4 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+
+
 }
