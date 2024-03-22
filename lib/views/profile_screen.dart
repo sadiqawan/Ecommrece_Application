@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import '../modes/custom_wedgits/profile_show_name_container.dart';
@@ -26,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
     userSnapshot =
-    await FirebaseFirestore.instance.collection('user').doc(uid).get();
+        await FirebaseFirestore.instance.collection('user').doc(uid).get();
 
     setState(() {});
   }
@@ -48,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     UploadTask uploadTask = storage
         .ref()
-    //.child('profile_images')
+        //.child('profile_images')
         .child(fileName)
         .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
 
@@ -56,7 +57,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     String profileImageUrl = await snapshot.ref.getDownloadURL();
     print(profileImageUrl);
-
 
     // save its url in users collection
 
@@ -93,17 +93,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 100,
               width: 100,
               decoration: BoxDecoration(
-                color: Colors.black,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: (showLocalImage && chosenImage != null)
                   ? Image.file(chosenImage!, fit: BoxFit.cover)
                   : ((userSnapshot != null && userSnapshot!['photo'] != null)
-                  ? Image.network(userSnapshot!['photo'] as String,
-                  fit: BoxFit.cover)
-                  : Container()), // Display an empty container if no image is available
+                      ? Image.network(
+                          userSnapshot!['photo'] as String,
+                          fit: BoxFit.cover,
+                        )
+                      : const SpinKitSpinningLines(
+                          color: Colors.black,
+                          size: 40,
+                        )), // Display an empty container if no image is available
             ),
-
             const SizedBox(height: 16),
             InkWell(
               onTap: () {
@@ -152,22 +155,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ProfileNameContainer(text: 'Name: ${userSnapshot?['name'] ?? ''}'),
+              child: ProfileNameContainer(
+                  text: 'Name: ${userSnapshot?['name'] ?? ''}'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ProfileNameContainer(text: 'Email: ${userSnapshot?['email'] ?? ''}'),
+              child: ProfileNameContainer(
+                  text: 'Email: ${userSnapshot?['email'] ?? ''}'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ProfileNameContainer(text: 'Contact: ${userSnapshot?['phone'] ?? ''}'),
+              child: ProfileNameContainer(
+                  text: 'Contact: ${userSnapshot?['phone'] ?? ''}'),
             ),
             const SizedBox(height: 20),
             InkWell(
               onTap: () async {
                 await FirebaseAuth.instance.currentUser!.delete();
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+                Navigator.of(context)
+                    .pushReplacement(MaterialPageRoute(builder: (context) {
                   return const LoginScreen();
                 }));
               },
@@ -192,7 +199,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-
-
-
 }
