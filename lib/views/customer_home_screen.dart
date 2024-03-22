@@ -3,6 +3,7 @@ import 'package:ecommrece_application/controls/providers/customer_home_provider.
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
 import 'package:ecommrece_application/views/customer_shopping_screen.dart';
+import 'package:ecommrece_application/views/products_list.dart';
 import 'package:ecommrece_application/views/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -286,7 +287,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 child: CustomButton(
                     text: 'CHECK ALL LATEST',
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    onTap: () {}),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const  ProductsListScreen() ));
+                    }),
               ),
               const Gap(20),
               Padding(

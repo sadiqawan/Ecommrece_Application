@@ -1,6 +1,6 @@
-
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
+import 'package:ecommrece_application/controls/providers/search_provider.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:ecommrece_application/views/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:ecommrece_application/controls/providers/auth_provider.dart';
 
 import 'controls/providers/shopping_card_provider.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,16 +33,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-       ChangeNotifierProvider(create: (_) => LoginProvider()),
-       ChangeNotifierProvider(create: (_) => CustomerHomeProvider()),
-       ChangeNotifierProvider(create: (_) => FavouriteProvider()),
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => CustomerHomeProvider()),
+        ChangeNotifierProvider(create: (_) => FavouriteProvider()),
         ChangeNotifierProvider(create: (_) => ShoppingCardProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProvider()),
       ],
       child: MaterialApp(
-
         debugShowCheckedModeBanner: false,
         title: 'Bagzz',
-
         theme: ThemeData(
           fontFamily: GoogleFonts.playfairDisplay.toString(),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -53,7 +51,8 @@ class MyApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(body: Center(child: CircularProgressIndicator()));
+              return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()));
             }
             final user = snapshot.data;
             if (user != null && user.emailVerified) {
@@ -63,12 +62,7 @@ class MyApp extends StatelessWidget {
             }
           },
         ),
-
       ),
     );
-
-
-
-
   }
 }

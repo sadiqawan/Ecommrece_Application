@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../modes/custom_wedgits/profile_show_name_container.dart';
 import 'login_screen.dart';
 
@@ -97,13 +95,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: showLocalImage
+              child: (showLocalImage && chosenImage != null)
                   ? Image.file(chosenImage!, fit: BoxFit.cover)
-                  : (userSnapshot!['photo'] != null
+                  : ((userSnapshot != null && userSnapshot!['photo'] != null)
                   ? Image.network(userSnapshot!['photo'] as String,
                   fit: BoxFit.cover)
                   : Container()), // Display an empty container if no image is available
             ),
+
             const SizedBox(height: 16),
             InkWell(
               onTap: () {
