@@ -5,6 +5,7 @@ import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:ecommrece_application/views/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,12 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
-                  body: Center(child: CircularProgressIndicator()));
+                body: Center(
+                    child: SpinKitSpinningLines(
+                  color: Colors.black,
+                  size: 80,
+                )),
+              );
             }
             final user = snapshot.data;
             if (user != null && user.emailVerified) {

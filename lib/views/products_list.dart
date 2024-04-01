@@ -9,7 +9,7 @@ import '../controls/providers/shopping_card_provider.dart';
 import '../modes/custom_wedgits/add_to_card_button.dart';
 
 class ProductsListScreen extends StatefulWidget {
-  const ProductsListScreen({Key? key}) : super(key: key);
+  const ProductsListScreen({super.key});
 
   @override
   State<ProductsListScreen> createState() => _ProductsListScreenState();
@@ -25,6 +25,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title:const Text('All Products'),),
       body: Consumer<CustomerHomeProvider>(
         builder: (context, value, child) {
           if (value.products == null) {
@@ -74,30 +75,31 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                   height: 5,
                                 ),
                                 Text(
-                                  product['description'].toString(),
+                                  '\$ : ${product['price'].toString()}',
                                   style: const TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 15,
                                   ),
                                 ),
+
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                TextButton(
-                                  onPressed: () {
-                                    context
-                                        .read<FavouriteProvider>()
-                                        .removeFavouriteItem(index);
-                                  },
-                                  child: const Text(
-                                    'Remove',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                )
+                                // TextButton(
+                                //   onPressed: () {
+                                //     context
+                                //         .read<FavouriteProvider>()
+                                //         .removeFavouriteItem(index);
+                                //   },
+                                //   child: const Text(
+                                //     'Remove',
+                                //     style: TextStyle(
+                                //       color: Colors.black,
+                                //       fontWeight: FontWeight.bold,
+                                //       fontSize: 18,
+                                //       decoration: TextDecoration.underline,
+                                //     ),
+                                //   ),
+                                // )
                               ],
                             ),
                             const SizedBox(

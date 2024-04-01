@@ -7,6 +7,7 @@ class LoginProvider extends ChangeNotifier {
   bool isLoading = false;
   bool emailVarify = false;
 
+
   Future<void> signUp(String email, String password, String phone, String name) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
@@ -29,6 +30,7 @@ class LoginProvider extends ChangeNotifier {
         backgroundColor: Colors.green,
       );
         } catch (e) {
+      print(e.toString());
       Fluttertoast.showToast(
         msg: 'Registration Failed: $e',
         backgroundColor: Colors.red,
@@ -72,4 +74,5 @@ class LoginProvider extends ChangeNotifier {
       print('Failed to send password reset email: $error');
     }
   }
+
 }

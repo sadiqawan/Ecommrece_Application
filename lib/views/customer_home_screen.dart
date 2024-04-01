@@ -45,12 +45,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [IconButton(onPressed: (){
-          if (context != null) {
-            Navigator.of(context)!.push(
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            );
-          }
-        }, icon: const Icon(Icons.person,size: 45,)), const SizedBox(width: 10,)],
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+          );
+                }, icon: const Icon(Icons.person,size: 45,)), const SizedBox(width: 10,)],
       ),
       drawer: const CustomDrawer(),
 
