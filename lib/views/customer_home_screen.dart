@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 import '../controls/providers/shopping_card_provider.dart';
 import '../modes/custom_wedgits/custom_drawer.dart';
+import 'product_details_screen.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({Key? key}) : super(key: key);
@@ -190,99 +191,103 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               const Gap(20),
 
 
-              Consumer<CustomerHomeProvider>(
-                builder: (context, provider, child) {
-                  if (provider.products == null) {
-                    return const Center(
-                      child: SpinKitSpinningLines(color: Colors.white),
-                    ); // Show loading indicator while fetching data
-                  } else if (provider.products!.isEmpty) {
-                    return const Center(
-                      child: Text('No products found'),
-                    ); // Show message if there are no products
-                  } else {
-                    return  Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: provider.products!.length,
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                        ),
-                        itemBuilder: (context, index) {
-                          final product = provider.products![index];
-                          return Center(
-                            child: Stack(
-                              children: [
-                                Container(
-                                  color: Colors.black12,
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                        product['image'],
-                                        height: 120,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            ' ${product['name'].toString()}',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: Consumer<FavouriteProvider>(
-                                    builder: (context, value, child) {
-                                      return Consumer<FavouriteProvider>(
-                                        builder: (context, value, child) {
-                                          return IconButton(
-                                            onPressed: () {
-                                              if (value.favouriteItems.any((item) => item.index == index)) {
-                                                context.read<FavouriteProvider>().removeFavouriteItem(index);
-                                              } else {
-                                                // Ensure to pass the correct image and name parameters
-                                                context.read<FavouriteProvider>().setFavouriteItem(index, product['image'], product['name']);
-                                              }
-                                            },
-                                            icon: Icon(
-                                              value.favouriteItems.any((item) => item.index == index)
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border,
-                                              color: value.favouriteItems.any((item) => item.index == index)
-                                                  ? Colors.black
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                      );
-
-
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+          Consumer<CustomerHomeProvider>(
+            builder: (context, provider, child) {
+              if (provider.products == null) {
+                return const Center(
+                  child: SpinKitSpinningLines(color: Colors.white),
+                ); // Show loading indicator while fetching data
+              } else if (provider.products!.isEmpty) {
+                return const Center(
+                  child: Text('No products found'),
+                ); // Show message if there are no products
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: provider.products!.length,
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      final product = provider.products![index];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen(
+                            image: product['image'],
+                            price: product['price'].toString(),
+                            description: product['discreption'],
+                          )));
                         },
-                      ),
-                    );
+                        child: Center(
+                          child: Stack(
+                            children: [
+                              Container(
+                                color: Colors.black12,
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                      product['image'],
+                                      height: 120,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          ' ${product['name'].toString()}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Consumer<FavouriteProvider>(
+                                  builder: (context, value, child) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        if (value.favouriteItems.any((item) => item.index == index)) {
+                                          context.read<FavouriteProvider>().removeFavouriteItem(index);
+                                        } else {
+                                          // Ensure to pass the correct image and name parameters
+                                          context.read<FavouriteProvider>().setFavouriteItem(index, product['image'], product['name']);
+                                        }
+                                      },
+                                      icon: Icon(
+                                        value.favouriteItems.any((item) => item.index == index)
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: value.favouriteItems.any((item) => item.index == index)
+                                            ? Colors.black
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
+          ),
 
-                  }
-                },
-              ),
-              const Gap(20),
+          const Gap(20),
 
               Padding(
                 padding: const EdgeInsets.all(15.0),

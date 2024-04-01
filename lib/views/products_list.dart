@@ -84,22 +84,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                 const SizedBox(
                                   height: 5,
                                 ),
-                                // TextButton(
-                                //   onPressed: () {
-                                //     context
-                                //         .read<FavouriteProvider>()
-                                //         .removeFavouriteItem(index);
-                                //   },
-                                //   child: const Text(
-                                //     'Remove',
-                                //     style: TextStyle(
-                                //       color: Colors.black,
-                                //       fontWeight: FontWeight.bold,
-                                //       fontSize: 18,
-                                //       decoration: TextDecoration.underline,
-                                //     ),
-                                //   ),
-                                // )
+                               
                               ],
                             ),
                             const SizedBox(
