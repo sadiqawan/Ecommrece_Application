@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommrece_application/views/admin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -194,6 +195,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
+            InkWell(
+              onTap: () async {
+
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return const AdminScreen();
+                }));
+              },
+              child: Container(
+                height: 40,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Center(
+                  child: Text(
+                    'AdminScreen',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:ecommrece_application/controls/providers/admin_provider.dart';
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/controls/providers/search_provider.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FavouriteProvider()),
         ChangeNotifierProvider(create: (_) => ShoppingCardProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
