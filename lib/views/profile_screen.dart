@@ -20,7 +20,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   DocumentSnapshot? userSnapshot;
-
   File? chosenImage;
   bool showLocalImage = false;
 
