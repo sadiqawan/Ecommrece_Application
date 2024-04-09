@@ -1,11 +1,8 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ecommrece_application/controls/providers/admin_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -15,8 +12,6 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminState extends State<AdminScreen> {
-  DocumentSnapshot? productSnapshot;
-  File? productImage;
   TextEditingController? titleC, desC, priceC;
 
   @override
@@ -35,38 +30,7 @@ class _AdminState extends State<AdminScreen> {
     super.dispose();
   }
 
-  pickImageFrom(ImageSource imageSource) async {
-    XFile? xFile = await ImagePicker().pickImage(source: imageSource);
 
-    if (xFile == null) return;
-
-    productImage = File(xFile.path);
-
-    FirebaseStorage storage = FirebaseStorage.instance;
-
-    var fileName = titleC!.text.trim() + '.png';
-
-    UploadTask uploadTask = storage
-        .ref()
-        .child(fileName)
-        .putFile(productImage!, SettableMetadata(contentType: 'image/png'));
-
-    TaskSnapshot snapshot = await uploadTask;
-
-    String productUrl = await snapshot.ref.getDownloadURL();
-    print(productUrl);
-
-    await FirebaseFirestore.instance.collection('products').add({
-      'name': titleC!.text.trim(),
-      'price': priceC!.text.trim(),
-      'description': desC!.text.trim(),
-      'image': productUrl,
-    });
-
-    Fluttertoast.showToast(msg: 'Image uploaded');
-  }
-
-  bool _isUploading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +91,10 @@ class _AdminState extends State<AdminScreen> {
                             title: const Text('From Camera'),
                             onTap: () {
                               Navigator.of(context).pop();
-                              pickImageFrom(ImageSource.camera);
+                              context
+                                  .read<AdminProvider>()
+                                  .pickImageFrom(ImageSource.camera);
+
                             },
                           ),
                           ListTile(
@@ -135,7 +102,9 @@ class _AdminState extends State<AdminScreen> {
                             title: const Text('From Gallery'),
                             onTap: () {
                               Navigator.of(context).pop();
-                              pickImageFrom(ImageSource.gallery);
+                              context
+                                  .read<AdminProvider>()
+                                  .pickImageFrom(ImageSource.gallery);
                             },
                           ),
                         ],
@@ -152,32 +121,26 @@ class _AdminState extends State<AdminScreen> {
               const SizedBox(
                 height: 15,
               ),
-              _isUploading
-                  ? const CircularProgressIndicator()
-                  : InkWell(
-                onTap: () async {
-                  setState(() {
-                    _isUploading = true; // Set the uploading state to true
-                  });
-                  try {
-                    await FirebaseFirestore.instance.collection('products').add({
-                      'name': titleC!.text.trim(),
-                      'price': priceC!.text.trim(),
-                      'discreption': desC!.text.trim(),
-                      'image': null,
-                    });
-                    // Reset the state after successful upload
-                    setState(() {
-                      _isUploading = false;
-                      Fluttertoast.showToast(msg: 'Successfully uploaded');
-                      Navigator.pop(context);
-                    });
-                  } catch (e) {
-                    print(e.toString());
-                    // Reset the state if an error occurs
-                    setState(() {
-                      _isUploading = false;
-                    });
+
+              InkWell(
+                onTap: () {
+                  if (titleC != null && priceC != null && desC != null) {
+                    String title = titleC!.text.toString().trim();
+                    String price = priceC!.text.toString().trim();
+                    String description = desC!.text.toString().trim();
+
+                    if (title.isNotEmpty && price.isNotEmpty && description.isNotEmpty) {
+                      context.read<AdminProvider>().uploadTask(
+                        context,
+                        title,
+                        price,
+                        description,
+                      );
+                    } else {
+                      Fluttertoast.showToast(msg: 'Please fill in all fields');
+                    }
+                  } else {
+                    Fluttertoast.showToast(msg: 'Please fill in all fields');
                   }
                 },
                 child: Container(
@@ -187,13 +150,27 @@ class _AdminState extends State<AdminScreen> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Center(
-                    child: Text(
+                  child:  Container(
+                  height: 40,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: context.watch<AdminProvider>().uploading
+                        ? const CircularProgressIndicator()
+                        : const Text(
                       'Upload',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
+
+              ),
+
+
+
               ),
             ],
           ),

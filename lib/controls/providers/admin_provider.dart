@@ -1,49 +1,62 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AdminProvider extends ChangeNotifier {
-  String? productTitle;
-  String? productDescription;
-  File? chooseImage;
-
-  void productDetails(String productTitle, String productDescription) {
-    // Implement your product details functionality here
-  }
+  late File? productImage;
+  late bool uploading = false;
 
   Future<void> pickImageFrom(ImageSource imageSource) async {
     // Pick image from image source
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: imageSource);
+    XFile? xFile = await ImagePicker().pickImage(source: imageSource);
 
-    if (pickedImage != null) {
-      chooseImage = File(pickedImage.path);
+    if (xFile == null) return;
+    productImage = File(xFile.path);
+    notifyListeners();
+  }
 
-      // Upload image to storage
-      final storage = FirebaseStorage.instance;
-      final fileName = FirebaseAuth.instance.currentUser!.email! + '.png';
+  Future<void> uploadTask(BuildContext context, String titleC, String priceC,
+      String desC) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
 
-      final ref = storage.ref().child(fileName);
-      final uploadTask = ref.putFile(chooseImage!);
-      final snapshot = await uploadTask;
+    var fileName = '${titleC.trim()}.png';
 
-      final profileImageUrl = await snapshot.ref.getDownloadURL();
+    UploadTask uploadTask = storage
+        .ref()
+        .child(fileName)
+        .putFile(productImage!, SettableMetadata(contentType: 'image/png'));
 
-      // Save image URL in user's collection
-      final uid = FirebaseAuth.instance.currentUser!.uid;
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'photo': profileImageUrl,
+    try {
+      uploading = true;
+      notifyListeners();
+
+      TaskSnapshot snapshot = await uploadTask;
+
+      String productUrl = await snapshot.ref.getDownloadURL();
+      // print(productUrl);
+
+      await FirebaseFirestore.instance.collection('products').add({
+        'name': titleC.trim(),
+        'price': priceC.trim(),
+        'discreption': desC.trim(), // corrected spelling here
+        'image': productUrl,
       });
 
-      Fluttertoast.showToast(msg: 'Profile image uploaded');
-    } else {
-      // User canceled image picking
-      Fluttertoast.showToast(msg: 'No image selected');
+      Fluttertoast.showToast(msg: 'Data uploaded');
+      Navigator.of(context).pop(); // Close the current screen
+
+      uploading = false; // Set uploading to false after successful upload
+      notifyListeners();
+    } catch (error) {
+      // Handle error
+      print('Error uploading data: $error');
+      uploading = false; // Set uploading to false if an error occurs
+      notifyListeners();
+      // Show error message or handle error as needed
+      Fluttertoast.showToast(msg: 'Error uploading data. Please try again.');
     }
   }
 }

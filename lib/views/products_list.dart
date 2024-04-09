@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../controls/providers/customer_home_provider.dart';
-import '../controls/providers/favourite_provider.dart';
+
 import '../controls/providers/shopping_card_provider.dart';
 import '../modes/custom_wedgits/add_to_card_button.dart';
 
