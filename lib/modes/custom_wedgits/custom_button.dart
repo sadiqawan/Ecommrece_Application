@@ -6,12 +6,13 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color? backgroundColor;
 
-  const CustomButton(
-      {super.key,
-      required this.text,
-      required this.onTap,
-      this.backgroundColor,
-      this.textStyle});
+  const CustomButton({
+    super.key,
+    required this.text,
+    required this.onTap,
+    this.backgroundColor,
+    this.textStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,11 @@ class CustomButton extends StatelessWidget {
           color: backgroundColor,
         ),
         child: Center(
-            child: Text(
-          text,
-          style: textStyle,
-        )),
+          child: Text(
+            text,
+            style: textStyle,
+          ),
+        ),
       ),
     );
   }

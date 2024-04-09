@@ -8,9 +8,12 @@ class LoginProvider extends ChangeNotifier {
   bool emailVarify = false;
 
 
-  Future<void> signUp(String email, String password, String phone, String name) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  Future<void> signUp( BuildContext context ,String email, String password, String phone, String name) async {
+
     try {
+      isLoading = true;
+      notifyListeners();
+      FirebaseAuth auth = FirebaseAuth.instance;
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -24,17 +27,21 @@ class LoginProvider extends ChangeNotifier {
         'password': password.trim(),
         'photo': null
       });
-
       Fluttertoast.showToast(
         msg: 'Successfully Registered',
         backgroundColor: Colors.green,
       );
+      Navigator.of(context).pop();
+      isLoading = false;
+      notifyListeners();
+
         } catch (e) {
       print(e.toString());
       Fluttertoast.showToast(
         msg: 'Registration Failed: $e',
         backgroundColor: Colors.red,
       );
+
     } finally {
       isLoading = false;
       notifyListeners();

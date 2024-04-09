@@ -1,5 +1,4 @@
 import 'package:ecommrece_application/controls/providers/auth_provider.dart';
-import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -89,21 +88,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   Expanded(
                       child: CustomButton(
-                          text: 'Register',
-                          backgroundColor: Colors.black,
-                          textStyle: const TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                          onTap: () async {
-                            await context.read<LoginProvider>().signUp(
-                                emailC!.text.trim(),
-                                passwordC!.text.trim(),
-                                phoneC!.text.trim(),
-                                nameC!.text.trim());
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
+                        backgroundColor: Colors.black,
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        onTap: () async {
 
-                          })),
+                          await context.read<LoginProvider>().signUp(
+                            context,
+                            emailC!.text.trim(),
+                            passwordC!.text.trim(),
+                            phoneC!.text.trim(),
+                            nameC!.text.trim(),
+                          );
+                        },
+                        text: 'Register',
+                      )
+                  ),
                 ],
               ),
               const Gap(10),

@@ -159,7 +159,7 @@ class _AdminState extends State<AdminScreen> {
                   ),
                   child: Center(
                     child: context.watch<AdminProvider>().uploading
-                        ? const CircularProgressIndicator()
+                        ? const CircularProgressIndicator( color: Colors.white,)
                         : const Text(
                       'Upload',
                       style: TextStyle(color: Colors.white),
