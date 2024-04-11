@@ -2,6 +2,7 @@ import 'package:ecommrece_application/controls/providers/admin_provider.dart';
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/controls/providers/search_provider.dart';
+import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:ecommrece_application/views/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ShoppingCardProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
         ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => UserProfileProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/admin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,17 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../modes/custom_wedgits/profile_show_name_container.dart';
 import 'login_screen.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class UserProfileScreen extends StatefulWidget {
+  const UserProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _UserProfileScreenState extends State<UserProfileScreen> {
+
+
+
+
   DocumentSnapshot? userSnapshot;
   File? chosenImage;
   bool showLocalImage = false;
@@ -32,46 +38,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {});
   }
 
-  pickImageFrom(ImageSource imageSource) async {
-    XFile? xFile = await ImagePicker().pickImage(source: imageSource);
-
-    if (xFile == null) return;
-
-    chosenImage = File(xFile.path);
-    setState(() {
-      showLocalImage = true;
-    });
-
-    // upload image to storage
-    FirebaseStorage storage = FirebaseStorage.instance;
-
-    var fileName = userSnapshot!['email'] + '.png';
-
-    UploadTask uploadTask = storage
-        .ref()
-        //.child('profile_images')
-        .child(fileName)
-        .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
-
-    TaskSnapshot snapshot = await uploadTask;
-
-    String profileImageUrl = await snapshot.ref.getDownloadURL();
-    print(profileImageUrl);
-
-    // save its url in users collection
-
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance
-        .collection('user')
-        .doc(uid)
-        .update({'photo': profileImageUrl});
-
-    Fluttertoast.showToast(msg: 'Profile image uploaded');
-  }
+  // pickImageFrom(ImageSource imageSource) async {
+  //   XFile? xFile = await ImagePicker().pickImage(source: imageSource);
+  //
+  //   if (xFile == null) return;
+  //
+  //   chosenImage = File(xFile.path);
+  //   setState(() {
+  //     showLocalImage = true;
+  //   });
+  //
+  //   // upload image to storage
+  //   FirebaseStorage storage = FirebaseStorage.instance;
+  //
+  //   var fileName = userSnapshot!['email'] + '.png';
+  //
+  //   UploadTask uploadTask = storage
+  //       .ref()
+  //       //.child('profile_images')
+  //       .child(fileName)
+  //       .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
+  //
+  //   TaskSnapshot snapshot = await uploadTask;
+  //
+  //   String profileImageUrl = await snapshot.ref.getDownloadURL();
+  //   print(profileImageUrl);
+  //
+  //   // save its url in users collection
+  //
+  //   String uid = FirebaseAuth.instance.currentUser!.uid;
+  //   await FirebaseFirestore.instance
+  //       .collection('user')
+  //       .doc(uid)
+  //       .update({'photo': profileImageUrl});
+  //
+  //   Fluttertoast.showToast(msg: 'Profile image uploaded');
+  // }
 
   @override
   void initState() {
-    getUserDetails();
+    Provider.of<UserProfileProvider>(context, listen: false).getUserSnapshot();
+    // getUserDetails();
     super.initState();
   }
 
@@ -121,7 +128,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           title: const Text('From Camera'),
                           onTap: () {
                             Navigator.of(context).pop();
-                            pickImageFrom(ImageSource.camera);
+                            context
+                                .read<UserProfileProvider>()
+                                .pickImageFrom(ImageSource.camera);
+
                           },
                         ),
                         ListTile(
@@ -129,7 +139,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           title: const Text('From Gallery'),
                           onTap: () {
                             Navigator.of(context).pop();
-                            pickImageFrom(ImageSource.gallery);
+                            context
+                                .read<UserProfileProvider>()
+                                .pickImageFrom(ImageSource.gallery);
                           },
                         ),
                       ],
@@ -153,30 +165,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ProfileNameContainer(
-                  text: 'Name: ${userSnapshot?['name'] ?? ''}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ProfileNameContainer(
-                  text: 'Email: ${userSnapshot?['email'] ?? ''}'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ProfileNameContainer(
-                  text: 'Contact: ${userSnapshot?['phone'] ?? ''}'),
-            ),
+            Consumer<UserProfileProvider>(builder: (context, value, child) {
+
+              return Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ProfileNameContainer(
+                          text: 'Name: ${value.userSnapshot?['name'] ?? ''}'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ProfileNameContainer(
+                          text: 'Email: ${value.userSnapshot?['email'] ?? ''}'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ProfileNameContainer(
+                          text: 'Contact: ${value.userSnapshot?['phone'] ?? ''}'),
+                    ),
+                  ],
+                ),
+              );
+            }),
+
             const SizedBox(height: 20),
             InkWell(
               onTap: () async {
-                await FirebaseAuth.instance.currentUser!.delete();
-
-                Navigator.of(context)
-                    .pushReplacement(MaterialPageRoute(builder: (context) {
-                  return const LoginScreen();
-                }));
+               context.read<UserProfileProvider>().getUserDelete(context);
               },
               child: Container(
                 height: 40,
