@@ -32,6 +32,7 @@ class UserProfileProvider extends ChangeNotifier {
         .pushReplacement(MaterialPageRoute(builder: (context) {
       return const LoginScreen();
     }));
+    notifyListeners();
   }
 
 // for picking image from device
