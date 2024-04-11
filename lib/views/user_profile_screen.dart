@@ -4,7 +4,6 @@ import 'package:ecommrece_application/controls/providers/user_profile_provider.d
 import 'package:ecommrece_application/views/admin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,22 +20,18 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-
-
-
-
-  DocumentSnapshot? userSnapshot;
-  File? chosenImage;
-  bool showLocalImage = false;
-
-  getUserDetails() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-
-    userSnapshot =
-        await FirebaseFirestore.instance.collection('user').doc(uid).get();
-
-    setState(() {});
-  }
+  // DocumentSnapshot? userSnapshot;
+  // File? chosenImage;
+  // bool showLocalImage = false;
+  //
+  // getUserDetails() async {
+  //   String uid = FirebaseAuth.instance.currentUser!.uid;
+  //
+  //   userSnapshot =
+  //       await FirebaseFirestore.instance.collection('user').doc(uid).get();
+  //
+  //   setState(() {});
+  // }
 
   // pickImageFrom(ImageSource imageSource) async {
   //   XFile? xFile = await ImagePicker().pickImage(source: imageSource);
@@ -96,24 +91,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Container(
-              height: 100,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: (showLocalImage && chosenImage != null)
-                  ? Image.file(chosenImage!, fit: BoxFit.cover)
-                  : ((userSnapshot != null && userSnapshot!['photo'] != null)
-                      ? Image.network(
-                          userSnapshot!['photo'] as String,
-                          fit: BoxFit.cover,
-                        )
-                      : const SpinKitSpinningLines(
-                          color: Colors.black,
-                          size: 40,
-                        )), // Display an empty container if no image is available
-            ),
+           Consumer<UserProfileProvider>(builder: (context, value , child){
+             return Container(
+               height: 100,
+               width: 100,
+               decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(20),
+               ),
+               child: (value.showLocalImage && value.chosenImage != null)
+                   ? Image.file(value.chosenImage!, fit: BoxFit.cover)
+                   : ((value.userSnapshot != null && value.userSnapshot!['photo'] != null)
+                   ? Image.network(
+                 value.
+                 userSnapshot!['photo'] as String,
+                 fit: BoxFit.cover,
+               )
+                   : const SpinKitSpinningLines(
+                 color: Colors.black,
+                 size: 40,
+               )), // Display an empty container if no image is available
+             );
+           }),
+
+
             const SizedBox(height: 16),
             InkWell(
               onTap: () {
@@ -131,7 +131,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             context
                                 .read<UserProfileProvider>()
                                 .pickImageFrom(ImageSource.camera);
-
                           },
                         ),
                         ListTile(
@@ -166,7 +165,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             const SizedBox(height: 20),
             Consumer<UserProfileProvider>(builder: (context, value, child) {
-
               return Container(
                 child: Column(
                   children: [
@@ -183,17 +181,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: ProfileNameContainer(
-                          text: 'Contact: ${value.userSnapshot?['phone'] ?? ''}'),
+                          text:
+                              'Contact: ${value.userSnapshot?['phone'] ?? ''}'),
                     ),
                   ],
                 ),
               );
             }),
-
             const SizedBox(height: 20),
             InkWell(
               onTap: () async {
-               context.read<UserProfileProvider>().getUserDelete(context);
+                context.read<UserProfileProvider>().getUserDelete(context);
               },
               child: Container(
                 height: 40,
@@ -213,8 +211,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             const SizedBox(height: 20),
             InkWell(
               onTap: () async {
-
-
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
                   return const AdminScreen();

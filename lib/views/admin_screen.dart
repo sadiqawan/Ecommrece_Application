@@ -30,8 +30,6 @@ class _AdminState extends State<AdminScreen> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +92,6 @@ class _AdminState extends State<AdminScreen> {
                               context
                                   .read<AdminProvider>()
                                   .pickImageFrom(ImageSource.camera);
-
                             },
                           ),
                           ListTile(
@@ -121,7 +118,6 @@ class _AdminState extends State<AdminScreen> {
               const SizedBox(
                 height: 15,
               ),
-
               InkWell(
                 onTap: () {
                   if (titleC != null && priceC != null && desC != null) {
@@ -129,13 +125,15 @@ class _AdminState extends State<AdminScreen> {
                     String price = priceC!.text.toString().trim();
                     String description = desC!.text.toString().trim();
 
-                    if (title.isNotEmpty && price.isNotEmpty && description.isNotEmpty) {
+                    if (title.isNotEmpty &&
+                        price.isNotEmpty &&
+                        description.isNotEmpty) {
                       context.read<AdminProvider>().uploadTask(
-                        context,
-                        title,
-                        price,
-                        description,
-                      );
+                            context,
+                            title,
+                            price,
+                            description,
+                          );
                     } else {
                       Fluttertoast.showToast(msg: 'Please fill in all fields');
                     }
@@ -150,27 +148,25 @@ class _AdminState extends State<AdminScreen> {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child:  Container(
-                  height: 40,
-                  width: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: context.watch<AdminProvider>().uploading
-                        ? const CircularProgressIndicator( color: Colors.white,)
-                        : const Text(
-                      'Upload',
-                      style: TextStyle(color: Colors.white),
+                  child: Container(
+                    height: 40,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: context.watch<AdminProvider>().uploading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              'Upload',
+                              style: TextStyle(color: Colors.white),
+                            ),
                     ),
                   ),
                 ),
-
-              ),
-
-
-
               ),
             ],
           ),
