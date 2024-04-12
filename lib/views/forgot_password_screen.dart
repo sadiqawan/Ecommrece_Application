@@ -1,15 +1,19 @@
-import 'dart:html';
+
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+import '../controls/providers/auth_provider.dart';
+
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   TextEditingController? emailC;
 
   @override
@@ -50,6 +54,21 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             const SizedBox(
               height: 20,
             ),
+            ElevatedButton(
+                onPressed:   () {
+
+                  String? email = emailC?.text.trim(); // Get the trimmed email value
+                  if (email == null || email.isEmpty) {
+                    Fluttertoast.showToast(
+                      msg: 'Failed to send: Email is empty',
+                      backgroundColor: Colors.red,
+                    );
+                  } else {
+                    context.read<LoginProvider>().forgotPassword(context , emailC!.text.trim());
+                  }
+                },
+
+                child: const Text('Sand'))
           ],
         ),
       ),

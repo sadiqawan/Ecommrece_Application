@@ -71,14 +71,18 @@ class LoginProvider extends ChangeNotifier {
     FirebaseAuth.instance.signOut();
   }
 
-  void forgotPassword(String email) async {
+  void forgotPassword(BuildContext context, String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       // Password reset email sent successfully
       print('Password reset email sent to $email');
+    Fluttertoast.showToast(msg: 'Password reset email sent to $email');
+    Navigator.pop(context);
     } catch (error) {
       // Handle any errors that occurred during the password reset process
       print('Failed to send password reset email: $error');
+      Fluttertoast.showToast(msg: 'Password reset email sent to $error');
+
     }
   }
 

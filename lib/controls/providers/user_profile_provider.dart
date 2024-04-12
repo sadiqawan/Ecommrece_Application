@@ -42,8 +42,7 @@ class UserProfileProvider extends ChangeNotifier {
     if (xFile == null) return;
 
     chosenImage = File(xFile.path);
-    showLocalImage = true;
-    notifyListeners();
+
 
 
     // upload image to storage
@@ -71,6 +70,7 @@ class UserProfileProvider extends ChangeNotifier {
         .update({'photo': profileImageUrl});
 
     Fluttertoast.showToast(msg: 'Profile image uploaded');
+    showLocalImage = true;
     notifyListeners();
   }
 }

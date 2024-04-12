@@ -1,4 +1,3 @@
-
 import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/admin_screen.dart';
 import 'package:flutter/material.dart';
@@ -87,29 +86,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-           Consumer<UserProfileProvider>(builder: (context, value , child){
-             return Container(
-               height: 100,
-               width: 100,
-               decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(20),
-               ),
-               child: (value.showLocalImage && value.chosenImage != null)
-                   ? Image.file(value.chosenImage!, fit: BoxFit.cover)
-                   : ((value.userSnapshot != null && value.userSnapshot!['photo'] != null)
-                   ? Image.network(
-                 value.
-                 userSnapshot!['photo'] as String,
-                 fit: BoxFit.cover,
-               )
-                   : const SpinKitSpinningLines(
-                 color: Colors.black,
-                 size: 40,
-               )), // Display an empty container if no image is available
-             );
-           }),
-
-
+            Consumer<UserProfileProvider>(builder: (context, value, child) {
+              return Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: (value.showLocalImage && value.chosenImage != null)
+                    ? Image.file(value.chosenImage!, fit: BoxFit.cover)
+                    : ((value.userSnapshot != null &&
+                            value.userSnapshot!['photo'] != null)
+                        ? Image.network(
+                            value.userSnapshot!['photo'] as String,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'images/person.jpg')), // Display an empty container if no image is available
+              );
+            }),
             const SizedBox(height: 16),
             InkWell(
               onTap: () {
@@ -145,42 +140,46 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 );
               },
               child: Container(
-                height: 40,
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    'UPDATE PIC',
-                    style: TextStyle(color: Colors.white),
+                  height: 40,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-              ),
+                  child: Consumer<UserProfileProvider>(
+                      builder: (context, value, child) {
+                    return Center(
+                        child: value.showLocalImage
+                            ? const Text(
+                                'UPDATE PIC',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            : const Text(
+                                'UPLOAD PIC',
+                                style: TextStyle(color: Colors.white),
+                              ));
+                  })),
             ),
             const SizedBox(height: 20),
             Consumer<UserProfileProvider>(builder: (context, value, child) {
-              return Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ProfileNameContainer(
-                          text: 'Name: ${value.userSnapshot?['name'] ?? ''}'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ProfileNameContainer(
-                          text: 'Email: ${value.userSnapshot?['email'] ?? ''}'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ProfileNameContainer(
-                          text:
-                              'Contact: ${value.userSnapshot?['phone'] ?? ''}'),
-                    ),
-                  ],
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ProfileNameContainer(
+                          text: 'Name: ${value.userSnapshot?['name']}'),
+                      ProfileNameContainer(
+                          text: 'Email: ${value.userSnapshot?['email']}'),
+                      ProfileNameContainer(
+                          text: 'Contact: ${value.userSnapshot?['phone']}'),
+                    ],
+                  ),
                 ),
               );
             }),
