@@ -13,19 +13,21 @@ class UserProfileProvider extends ChangeNotifier {
   DocumentSnapshot? userSnapshot;
   bool showLocalImage = false;
 
+  // Stream controller for user snapshot
+  late Stream<DocumentSnapshot> _userSnapshotStream;
 
-
-  // getting user details
-
-  Future<void> getUserSnapshot() async {
+  // Constructor
+  UserProfileProvider() {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    userSnapshot =
-        await FirebaseFirestore.instance.collection('user').doc(uid).get();
+    _userSnapshotStream =
+        FirebaseFirestore.instance.collection('user').doc(uid).snapshots();
   }
 
-  // for user account deletion
+  // Getter for user snapshot stream
+  Stream<DocumentSnapshot> get userSnapshotStream => _userSnapshotStream;
 
-  Future<void> getUserDelete( BuildContext context) async {
+  // for user account deletion
+  Future<void> getUserDelete(BuildContext context) async {
     var currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
@@ -37,22 +39,20 @@ class UserProfileProvider extends ChangeNotifier {
       // Delete the user account
       await currentUser.delete();
       Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => const LoginScreen()));
       // You might want to call notifyListeners() if this method is part of a class that extends ChangeNotifier.
       notifyListeners();
     }
   }
 
-
-// for picking image from device
+  // for picking image from device
   Future<void> pickImageFrom(ImageSource imageSource) async {
     XFile? xFile = await ImagePicker().pickImage(source: imageSource);
 
     if (xFile == null) return;
 
     chosenImage = File(xFile.path);
-
-
 
     // upload image to storage
     FirebaseStorage storage = FirebaseStorage.instance;
@@ -61,7 +61,6 @@ class UserProfileProvider extends ChangeNotifier {
 
     UploadTask uploadTask = storage
         .ref()
-        //.child('profile_images')
         .child(fileName)
         .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
 
@@ -71,7 +70,6 @@ class UserProfileProvider extends ChangeNotifier {
     print(profileImageUrl);
 
     // save its url in users collection
-
     String uid = FirebaseAuth.instance.currentUser!.uid;
     await FirebaseFirestore.instance
         .collection('user')

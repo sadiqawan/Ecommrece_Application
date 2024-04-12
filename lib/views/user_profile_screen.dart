@@ -1,13 +1,15 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/admin_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../modes/custom_wedgits/profile_show_name_container.dart';
+import 'login_screen.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -17,13 +19,6 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  @override
-  void initState() {
-    Provider.of<UserProfileProvider>(context as BuildContext, listen: false).getUserSnapshot();
-    // getUserDetails();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,28 +108,60 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   })),
             ),
             const SizedBox(height: 20),
-            Consumer<UserProfileProvider>(builder: (context, value, child) {
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Container(
-                  height: 300,
-                  decoration: BoxDecoration(
+            Consumer<UserProfileProvider>(
+              builder: (context, value, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    height: 300,
+                    decoration: BoxDecoration(
                       color: Colors.black12,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ProfileNameContainer(
-                          text: 'Name: ${value.userSnapshot?['name']}'),
-                      ProfileNameContainer(
-                          text: 'Email: ${value.userSnapshot?['email']}'),
-                      ProfileNameContainer(
-                          text: 'Contact: ${value.userSnapshot?['phone']}'),
-                    ],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: StreamBuilder<DocumentSnapshot>(
+                      stream: value.userSnapshotStream,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const SpinKitSpinningLines(
+                            color: Colors.black,
+                          ); // While loading
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Error: ${snapshot.error}'); // If there's an error
+                        } else if (!snapshot.hasData ||
+                            !snapshot.data!.exists) {
+                          return const Center(
+                            child: Text(
+                                'Document does not exist'),
+                          ); // If the document doesn't exist
+                        } else {
+                          var userSnapshot = snapshot.data!; // Access user data
+                          var data = userSnapshot.data() as Map<String,
+                              dynamic>; // Cast data to Map<String, dynamic>
+                          // Use user data to build your UI
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ProfileNameContainer(
+                                text: 'Name: ${data['name']}',
+                              ),
+                              ProfileNameContainer(
+                                text: 'Email: ${data['email']}',
+                              ),
+                              ProfileNameContainer(
+                                text: 'Contact: ${data['phone']}',
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
             const SizedBox(height: 20),
             InkWell(
               onTap: () {
@@ -143,7 +170,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text("Confirm Delete"),
-                      content: const Text("Are you sure you want to delete your account?"),
+                      content: const Text(
+                          "Are you sure you want to delete your account?"),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -154,8 +182,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         TextButton(
                           onPressed: () {
                             // Call the method to delete the user account
-                            context.read<UserProfileProvider>().getUserDelete(context);
-                            Navigator.of(context).pop(); // Close the dialog
+                            context
+                                .read<UserProfileProvider>()
+                                .getUserDelete(context);
+                            Navigator.of(context).pop();// Close the dialog
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
                           },
                           child: const Text("Delete"),
                         ),
@@ -164,8 +197,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   },
                 );
               },
-
-
               child: Container(
                 height: 40,
                 width: 200,
