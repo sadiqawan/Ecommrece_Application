@@ -1,8 +1,9 @@
 import 'package:ecommrece_application/controls/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import '../modes/custom_wedgits/custom_button.dart';
+
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -87,24 +88,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 children: [
                   Expanded(
-                      child: CustomButton(
-                        backgroundColor: Colors.black,
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        onTap: () async {
-
-                          await context.read<LoginProvider>().signUp(
-                            context,
-                            emailC!.text.trim(),
-                            passwordC!.text.trim(),
-                            phoneC!.text.trim(),
-                            nameC!.text.trim(),
-                          );
-                        },
-                        text: 'Register',
-                      )
+                    child: Consumer<LoginProvider>(
+                      builder: (BuildContext context, LoginProvider value,
+                          Widget? child) {
+                        return InkWell(
+                          onTap: () {
+                            if (nameC != null &&
+                                emailC != null &&
+                                passwordC != null &&
+                                phoneC != null) {
+                              context.read<LoginProvider>().signUp(
+                                    context,
+                                    emailC!.text.trim(),
+                                    passwordC!.text.trim(),
+                                    phoneC!.text.trim(),
+                                    nameC!.text.trim(),
+                                  );
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Enter the Required fields',
+                                  backgroundColor: Colors.red);
+                            }
+                          },
+                          child: Container(
+                            height: 45,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              color: Colors.black,
+                            ),
+                            child: Center(
+                              child: (context.watch<LoginProvider>().isLoading)
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      'Register',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

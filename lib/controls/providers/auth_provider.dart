@@ -50,6 +50,8 @@ class LoginProvider extends ChangeNotifier {
 
   Future<void> logIn(String email, String password) async {
     try {
+      isLoading = true;
+      notifyListeners();
       FirebaseAuth auth = FirebaseAuth.instance;
        emailVarify =  auth.currentUser!.emailVerified ;
       await auth.signInWithEmailAndPassword(
@@ -67,8 +69,9 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  void logOut (){
-    FirebaseAuth.instance.signOut();
+  void logOut () async{
+   await FirebaseAuth.instance.signOut();
+   
   }
 
   void forgotPassword(BuildContext context, String email) async {

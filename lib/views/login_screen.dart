@@ -4,11 +4,10 @@ import 'package:ecommrece_application/views/home_screen.dart';
 import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:ecommrece_application/views/verification_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
-import '../modes/custom_wedgits/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -75,13 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Consumer<LoginProvider>(
                       builder: (BuildContext context, LoginProvider value,
                           Widget? child) {
-                        return CustomButton(
-                            text: 'Login',
-                            backgroundColor: Colors.black,
-                            textStyle: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                            onTap: () {
+                        return InkWell(
+                          onTap: () {
+                            if (emailC != null && passwordC != null) {
                               context.read<LoginProvider>().logIn(
                                   emailC!.text.trim(), passwordC!.text.trim());
                               value.emailVarify
@@ -93,16 +88,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               const VerificationScreen()));
-                              if (value.isLoading) {
-                                Container(
-                                  color: Colors.white.withOpacity(0.5),
-                                  // Semi-transparent background
-                                  child: const Center(
-                                    child: SpinKitWave(color: Colors.black),
-                                  ),
-                                );
-                              }
-                            });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Enter Email & Password',
+                                  backgroundColor: Colors.red);
+                            }
+                          },
+                          child: Container(
+                              height: 45,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                color: Colors.black,
+                              ),
+                              child: Center(
+                                child: (context
+                                        .watch<LoginProvider>()
+                                        .isLoading)
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Login',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                              )),
+                        );
                       },
                     ),
                   ),
@@ -111,17 +121,16 @@ class _LoginScreenState extends State<LoginScreen> {
               const Gap(16),
               TextButton(
                 onPressed: () {
-
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()) );
-
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordScreen()));
                 },
                 child: const Text('Forgot Password ? '),
               ),
-
               const Gap(16),
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const SignUpScreen()));
                   },
                   child: const Text('Do not have account? SingUp!  ')),
               Image.asset('images/icon_image.jpg')
