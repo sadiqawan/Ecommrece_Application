@@ -1,7 +1,9 @@
+
+
 import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/admin_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -15,59 +17,9 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  // DocumentSnapshot? userSnapshot;
-  // File? chosenImage;
-  // bool showLocalImage = false;
-  //
-  // getUserDetails() async {
-  //   String uid = FirebaseAuth.instance.currentUser!.uid;
-  //
-  //   userSnapshot =
-  //       await FirebaseFirestore.instance.collection('user').doc(uid).get();
-  //
-  //   setState(() {});
-  // }
-
-  // pickImageFrom(ImageSource imageSource) async {
-  //   XFile? xFile = await ImagePicker().pickImage(source: imageSource);
-  //
-  //   if (xFile == null) return;
-  //
-  //   chosenImage = File(xFile.path);
-  //   setState(() {
-  //     showLocalImage = true;
-  //   });
-  //
-  //   // upload image to storage
-  //   FirebaseStorage storage = FirebaseStorage.instance;
-  //
-  //   var fileName = userSnapshot!['email'] + '.png';
-  //
-  //   UploadTask uploadTask = storage
-  //       .ref()
-  //       //.child('profile_images')
-  //       .child(fileName)
-  //       .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
-  //
-  //   TaskSnapshot snapshot = await uploadTask;
-  //
-  //   String profileImageUrl = await snapshot.ref.getDownloadURL();
-  //   print(profileImageUrl);
-  //
-  //   // save its url in users collection
-  //
-  //   String uid = FirebaseAuth.instance.currentUser!.uid;
-  //   await FirebaseFirestore.instance
-  //       .collection('user')
-  //       .doc(uid)
-  //       .update({'photo': profileImageUrl});
-  //
-  //   Fluttertoast.showToast(msg: 'Profile image uploaded');
-  // }
-
   @override
   void initState() {
-    Provider.of<UserProfileProvider>(context, listen: false).getUserSnapshot();
+    Provider.of<UserProfileProvider>(context as BuildContext, listen: false).getUserSnapshot();
     // getUserDetails();
     super.initState();
   }
@@ -185,9 +137,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             }),
             const SizedBox(height: 20),
             InkWell(
-              onTap: () async {
-                context.read<UserProfileProvider>().getUserDelete(context);
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Confirm Delete"),
+                      content: const Text("Are you sure you want to delete your account?"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: const Text("Cancel"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Call the method to delete the user account
+                            context.read<UserProfileProvider>().getUserDelete(context);
+                            Navigator.of(context).pop(); // Close the dialog
+                          },
+                          child: const Text("Delete"),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
+
+
               child: Container(
                 height: 40,
                 width: 200,
