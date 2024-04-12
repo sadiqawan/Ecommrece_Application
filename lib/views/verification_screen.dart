@@ -32,6 +32,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
     FirebaseAuth.instance.currentUser!.reload();
     if (FirebaseAuth.instance.currentUser!.emailVerified) {
       timer!.cancel();
+      Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomeScreen()));
     }
@@ -63,18 +64,31 @@ class _VerificationScreenState extends State<VerificationScreen> {
             const Gap(20),
             const SpinKitWave(color: Colors.black),
             const Gap(20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      FirebaseAuth.instance.currentUser!
-                          .sendEmailVerification();
-                    });
-                  },
-                  child: const Text(
-                    'Resend',
-                  )),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                  width: double.infinity,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        FirebaseAuth.instance.currentUser!
+                            .sendEmailVerification();
+                      });
+                    },
+                    child: Container(
+                        height: 45,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          color: Colors.black,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Resend',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )),
+                  ),
+              ),
             ),
           ],
         ),
