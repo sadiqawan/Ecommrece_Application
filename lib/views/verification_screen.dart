@@ -49,6 +49,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Center(
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: const Text('Verification Screen'),
         ),
         body: Column(

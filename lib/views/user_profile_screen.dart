@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/admin_screen.dart';
@@ -133,8 +131,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         } else if (!snapshot.hasData ||
                             !snapshot.data!.exists) {
                           return const Center(
-                            child: Text(
-                                'Document does not exist'),
+                            child: Text('Document does not exist'),
                           ); // If the document doesn't exist
                         } else {
                           var userSnapshot = snapshot.data!; // Access user data
@@ -164,6 +161,29 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             ),
             const SizedBox(height: 20),
             InkWell(
+              onTap: () async {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return const AdminScreen();
+                }));
+              },
+              child: Container(
+                height: 40,
+                width: 200,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Center(
+                  child: Text(
+                    'AdminScreen',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            InkWell(
               onTap: () {
                 showDialog(
                   context: context,
@@ -184,11 +204,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             // Call the method to delete the user account
                             context
                                 .read<UserProfileProvider>()
-                                .getUserDelete(context);
-                            Navigator.of(context).pop();// Close the dialog
-                            Navigator.of(context).popUntil((route) => route.isFirst);
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                builder: (context) => const LoginScreen()));
+                                .getUserDelete();
+                            Navigator.of(context).pop(); // Close the dialog
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()));
                           },
                           child: const Text("Delete"),
                         ),
@@ -207,29 +229,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 child: const Center(
                   child: Text(
                     'Delete MyAccount',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () async {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const AdminScreen();
-                }));
-              },
-              child: Container(
-                height: 40,
-                width: 200,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Center(
-                  child: Text(
-                    'AdminScreen',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

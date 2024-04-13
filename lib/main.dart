@@ -4,12 +4,11 @@ import 'package:ecommrece_application/controls/providers/favourite_provider.dart
 import 'package:ecommrece_application/controls/providers/search_provider.dart';
 import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/login_screen.dart';
-import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:ecommrece_application/views/splash_screen.dart';
+import 'package:ecommrece_application/views/verification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Bagzz',
         theme: ThemeData(
-          fontFamily: GoogleFonts.playfairDisplay.toString(),
+          fontFamily: GoogleFonts.playfairDisplay().toString(),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
@@ -59,21 +58,28 @@ class MyApp extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Scaffold(
                 body: Center(
-                    child: SpinKitSpinningLines(
-                  color: Colors.black,
-                  size: 80,
-                )),
+                  child: SpinKitSpinningLines(
+                    color: Colors.black,
+                    size: 80,
+                  ),
+                ),
               );
             }
             final user = snapshot.data;
-            if (user != null && user.emailVerified) {
+            if (user == null) {
+              // If no user is logged in, show the LoginScreen.
+              return const LoginScreen();
+            } else if (user.emailVerified) {
+              // If the user is logged in and their email is verified, show the SplashScreen.
               return const SplashScreen();
             } else {
-              return const LoginScreen();
+              // If the user is logged in but their email is not verified, show the Verification.
+              return const VerificationScreen();
             }
           },
         ),
-      ),
+      )
+
     );
   }
 }

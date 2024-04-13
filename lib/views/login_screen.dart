@@ -8,9 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
-
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -18,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController? emailC, passwordC;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -42,59 +42,72 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Gap(70),
-              TextField(
-                controller: emailC,
-                decoration: const InputDecoration(
-                    hintText: 'Email',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder()),
-              ),
-              const Gap(16),
-              TextField(
-                obscureText: true,
-                controller: passwordC,
-                decoration: InputDecoration(
-                    hintText: 'Password',
-                    prefixIcon: const Icon(Icons.lock_open_rounded),
-                    suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.remove_red_eye)),
-                    border: const OutlineInputBorder()),
-              ),
-              const Gap(16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Consumer<LoginProvider>(
-                      builder: (BuildContext context, LoginProvider value,
-                          Widget? child) {
-                        return InkWell(
-                          onTap: () {
-                            if (emailC != null && passwordC != null) {
-                              context.read<LoginProvider>().logIn(
-                                  emailC!.text.trim(), passwordC!.text.trim());
-                              value.emailVarify
-                                  ? Navigator.of(context).pushReplacement(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Gap(70),
+                TextFormField(
+                  controller: emailC,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      hintText: 'Email',
+                      prefixIcon: Icon(Icons.person),
+                      border: OutlineInputBorder()),
+                ),
+                const Gap(16),
+                TextFormField(
+                  obscureText: true,
+                  controller: passwordC,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      hintText: 'Password',
+                      prefixIcon: const Icon(Icons.lock_open_rounded),
+                      suffixIcon: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.remove_red_eye)),
+                      border: const OutlineInputBorder()),
+                ),
+                const Gap(16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Consumer<LoginProvider>(
+                        builder: (BuildContext context, LoginProvider value,
+                            Widget? child) {
+                          return InkWell(
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<LoginProvider>().logIn(
+                                    emailC!.text.trim(), passwordC!.text.trim());
+                                if (value.emailVarify) {
+                                  Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const HomeScreen()))
-                                  : Navigator.of(context).push(
+                                          const HomeScreen()));
+                                } else {
+                                  Navigator.of(context).push(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const VerificationScreen()));
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Enter Email & Password',
-                                  backgroundColor: Colors.red);
-                            }
-                          },
-                          child: Container(
+                                          const VerificationScreen()));
+                                }
+                              }
+                            },
+                            child: Container(
                               height: 45,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.black),
@@ -102,40 +115,41 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               child: Center(
                                 child: (context
-                                        .watch<LoginProvider>()
-                                        .isLoading)
+                                    .watch<LoginProvider>()
+                                    .isLoading)
                                     ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )
+                                  color: Colors.white,
+                                )
                                     : const Text(
-                                        'Login',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                                  'Login',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
-                          ),
-                        );
-                      },
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Gap(16),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ForgotPasswordScreen()));
-                },
-                child: const Text('Forgot Password ? '),
-              ),
-              const Gap(16),
-              TextButton(
+                  ],
+                ),
+                const Gap(16),
+                TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SignUpScreen()));
+                        builder: (context) => const ForgotPasswordScreen()));
                   },
-                  child: const Text('Do not have account? SingUp!  ')),
-              Image.asset('images/icon_image.jpg')
-            ],
+                  child: const Text('Forgot Password ? '),
+                ),
+                const Gap(16),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const SignUpScreen()));
+                    },
+                    child: const Text('Do not have account? SingUp!  ')),
+                Image.asset('images/icon_image.jpg')
+              ],
+            ),
           ),
         ),
       ),

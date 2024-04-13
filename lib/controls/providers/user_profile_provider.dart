@@ -26,25 +26,7 @@ class UserProfileProvider extends ChangeNotifier {
   // Getter for user snapshot stream
   Stream<DocumentSnapshot> get userSnapshotStream => _userSnapshotStream;
 
-  // for user account deletion
-  Future<void> getUserDelete(BuildContext context) async {
-    var currentUser = FirebaseAuth.instance.currentUser;
 
-    if (currentUser != null) {
-      var uid = currentUser.uid;
-
-      // Delete user data from Firestore
-      await FirebaseFirestore.instance.collection('user').doc(uid).delete();
-
-      // Delete the user account
-      await currentUser.delete();
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const LoginScreen()));
-      // You might want to call notifyListeners() if this method is part of a class that extends ChangeNotifier.
-      notifyListeners();
-    }
-  }
 
   // for picking image from device
   Future<void> pickImageFrom(ImageSource imageSource) async {
@@ -85,6 +67,13 @@ class UserProfileProvider extends ChangeNotifier {
       print('Error uploading image: $error');
       Fluttertoast.showToast(msg: 'Failed to upload profile image');
     }
+  }
+
+
+  // for user account deletion
+  Future<void> getUserDelete() async {
+    // var currentUser = FirebaseAuth.instance.currentUser;
+    FirebaseAuth.instance.currentUser!.delete();
   }
 
 }
