@@ -111,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         'Login',
                                         style: TextStyle(color: Colors.white),
                                       ),
-                              )),
+                              ),
+                          ),
                         );
                       },
                     ),

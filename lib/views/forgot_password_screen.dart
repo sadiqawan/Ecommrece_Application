@@ -39,7 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         padding: const EdgeInsets.all(13.0),
         child: Column(
           children: [
-            const Text('Please provide your email!'),
+            const Text('Please provide your email!' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
             const SizedBox(
               height: 20,
             ),
@@ -54,10 +54,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-                onPressed:   () {
+            InkWell(
 
-                  String? email = emailC?.text.trim(); // Get the trimmed email value
+              onTap: (){
+                try{
+                  
+                  String? email = emailC?.text.trim();
                   if (email == null || email.isEmpty) {
                     Fluttertoast.showToast(
                       msg: 'Failed to send: Email is empty',
@@ -66,9 +68,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   } else {
                     context.read<LoginProvider>().forgotPassword(context , emailC!.text.trim());
                   }
-                },
+                }catch(e){
+                  print(e.toString());
+                  Fluttertoast.showToast(msg: e.toString(), backgroundColor: Colors.red);
+                }
 
-                child: const Text('Sand'))
+              },
+              child: Container(
+                height: 45,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  color: Colors.black,
+                ),
+                child: const Center(
+                  child: Text(
+                    'Sand',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+
           ],
         ),
       ),

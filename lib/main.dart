@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
             final user = snapshot.data;
             if (user != null && user.emailVerified) {
               return const SplashScreen();
-
             } else {
               return const LoginScreen();
             }

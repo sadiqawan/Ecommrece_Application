@@ -52,32 +52,39 @@ class UserProfileProvider extends ChangeNotifier {
 
     if (xFile == null) return;
 
-    chosenImage = File(xFile.path);
-
-    // upload image to storage
-    FirebaseStorage storage = FirebaseStorage.instance;
-
-    var fileName = userSnapshot!['email'] + '.png';
-
-    UploadTask uploadTask = storage
-        .ref()
-        .child(fileName)
-        .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
-
-    TaskSnapshot snapshot = await uploadTask;
-
-    String profileImageUrl = await snapshot.ref.getDownloadURL();
-    print(profileImageUrl);
-
-    // save its url in users collection
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance
-        .collection('user')
-        .doc(uid)
-        .update({'photo': profileImageUrl});
-
-    Fluttertoast.showToast(msg: 'Profile image uploaded');
     showLocalImage = true;
     notifyListeners();
+    chosenImage = File(xFile.path);
+
+    // Upload image to storage
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    var fileName = '${FirebaseAuth.instance.currentUser!.email!}.png';
+
+    try {
+      // Upload the file and get its task
+      TaskSnapshot uploadTask = await storage
+          .ref()
+          .child(fileName)
+          .putFile(chosenImage!, SettableMetadata(contentType: 'image/png'));
+
+      // Get the download URL
+      String profileImageUrl = await uploadTask.ref.getDownloadURL();
+      print(profileImageUrl);
+
+      // Save the URL in the user's collection
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(uid)
+          .update({'photo': profileImageUrl});
+
+      Fluttertoast.showToast(msg: 'Profile image uploaded');
+    } catch (error) {
+      // Handle any potential errors
+      print('Error uploading image: $error');
+      Fluttertoast.showToast(msg: 'Failed to upload profile image');
+    }
   }
+
 }
