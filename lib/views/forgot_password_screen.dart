@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +37,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         padding: const EdgeInsets.all(13.0),
         child: Column(
           children: [
-            const Text('Please provide your email!' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            const Text(
+              'Please provide your email!',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -55,10 +56,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               height: 20,
             ),
             InkWell(
-
-              onTap: (){
-                try{
-                  
+              onTap: () {
+                try {
                   String? email = emailC?.text.trim();
                   if (email == null || email.isEmpty) {
                     Fluttertoast.showToast(
@@ -66,13 +65,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       backgroundColor: Colors.red,
                     );
                   } else {
-                    context.read<LoginProvider>().forgotPassword(context , emailC!.text.trim());
+                    context
+                        .read<LoginProvider>()
+                        .forgotPassword(context, emailC!.text.trim());
+                    Navigator.pop(context);
                   }
-                }catch(e){
+                } catch (e) {
                   print(e.toString());
-                  Fluttertoast.showToast(msg: e.toString(), backgroundColor: Colors.red);
+                  Fluttertoast.showToast(
+                      msg: e.toString(), backgroundColor: Colors.red);
                 }
-
               },
               child: Container(
                 height: 45,
@@ -88,7 +90,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
             ),
-
           ],
         ),
       ),

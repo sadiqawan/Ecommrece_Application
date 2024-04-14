@@ -83,3 +83,25 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// StreamBuilder<User?>(
+// stream: FirebaseAuth.instance.authStateChanges(),
+// builder: (context, snapshot) {
+// if (snapshot.connectionState == ConnectionState.waiting) {
+// return const Scaffold(
+// body: Center(
+// child: SpinKitSpinningLines(
+// color: Colors.black,
+// size: 80,
+// )),
+// );
+// }
+// final user = snapshot.data;
+// if (user != null && user.emailVerified) {
+// return const SplashScreen();
+// } else {
+// return const LoginScreen();
+// }
+// },
+// ),

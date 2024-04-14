@@ -193,6 +193,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       content: const Text(
                           "Are you sure you want to delete your account?"),
                       actions: [
+
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog

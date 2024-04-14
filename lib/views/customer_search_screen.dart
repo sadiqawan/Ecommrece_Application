@@ -8,7 +8,7 @@ import '../modes/custom_wedgits/custom_drawer.dart';
 import '../controls/providers/search_provider.dart';
 
 class CustomerSearchScreen extends StatefulWidget {
-  const CustomerSearchScreen({super.key});
+  const CustomerSearchScreen({Key? key}) : super(key: key);
 
   @override
   State<CustomerSearchScreen> createState() => _CustomerSearchScreenState();
@@ -43,11 +43,11 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<DocumentSnapshot>>(
-              future: Provider.of<SearchProvider>(context)
-                  .searchFirestore(_searchController.text),
+            child: StreamBuilder<List<DocumentSnapshot>>(
+              stream: Provider.of<SearchProvider>(context)
+                  .searchFirestoreStream(_searchController.text),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (!snapshot.hasData) {
                   return const Center(
                     child: SpinKitSpinningLines(color: Colors.black),
                   );

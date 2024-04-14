@@ -4,7 +4,6 @@ import 'package:ecommrece_application/views/home_screen.dart';
 import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:ecommrece_application/views/verification_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 

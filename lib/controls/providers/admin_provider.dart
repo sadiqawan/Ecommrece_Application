@@ -9,6 +9,7 @@ class AdminProvider extends ChangeNotifier {
   late File? productImage;
   late bool uploading = false;
 
+
   Future<void> pickImageFrom(ImageSource imageSource) async {
     // Pick image from image source
     XFile? xFile = await ImagePicker().pickImage(source: imageSource);
@@ -21,6 +22,7 @@ class AdminProvider extends ChangeNotifier {
   Future<void> uploadTask(BuildContext context, String titleC, String priceC,
       String desC) async {
     FirebaseStorage storage = FirebaseStorage.instance;
+
 
     var fileName = '${titleC.trim()}.png';
 
