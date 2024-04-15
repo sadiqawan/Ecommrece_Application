@@ -255,14 +255,14 @@ class _AdminState extends State<AdminScreen> {
               InkWell(
                 onTap: () {
                   if (brandNameC != null && brandDesC != null) {
-                    String title = brandNameC!.text.toString().trim();
+                    String brandName = brandNameC!.text.toString().trim();
                     String description = brandDesC!.text.toString().trim();
 
-                    if (title.isNotEmpty &&
+                    if (brandName.isNotEmpty &&
                         description.isNotEmpty) {
                       context.read<AdminProvider>().uploadBrandTask(
                         context,
-                        title,
+                        brandName,
                         description,
                       );
                     } else {
@@ -287,7 +287,7 @@ class _AdminState extends State<AdminScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                      child: context.watch<AdminProvider>().uploading
+                      child: context.watch<AdminProvider>().brUploading
                           ? const CircularProgressIndicator(
                         color: Colors.white,
                       )

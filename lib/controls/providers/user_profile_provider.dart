@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../views/login_screen.dart';
 
 class UserProfileProvider extends ChangeNotifier {
   File? chosenImage;
@@ -24,8 +25,6 @@ class UserProfileProvider extends ChangeNotifier {
 
   // Getter for user snapshot stream
   Stream<DocumentSnapshot> get userSnapshotStream => _userSnapshotStream;
-
-
 
   // for picking image from device
   Future<void> pickImageFrom(ImageSource imageSource) async {
@@ -68,11 +67,24 @@ class UserProfileProvider extends ChangeNotifier {
     }
   }
 
-
   // for user account deletion
   Future<void> getUserDelete() async {
-    // var currentUser = FirebaseAuth.instance.currentUser;
-    FirebaseAuth.instance.currentUser!.delete();
+    try {
+      // Check if the current user is not null before deleting the account
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        // Delete the user account
+        await currentUser.delete();
+        // Clear user data from Firestore
+        String uid = currentUser.uid;
+        await FirebaseFirestore.instance.collection('user').doc(uid).delete();
+        // Perform any additional cleanup or navigation after account deletion
+      } else {
+        print('Error deleting user account: Current user is null');
+      }
+    } catch (error) {
+      print('Error deleting user account: $error');
+      // Handle any potential errors
+    }
   }
-
 }

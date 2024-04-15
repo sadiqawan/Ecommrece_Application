@@ -9,6 +9,7 @@ class AdminProvider extends ChangeNotifier {
   late File? productImage;
   late File? brandLogo;
   late bool uploading = false;
+  late bool brUploading = false;
 
 
   Future<void> pickImageFrom(ImageSource imageSource) async {
@@ -91,7 +92,7 @@ class AdminProvider extends ChangeNotifier {
         .putFile(brandLogo!, SettableMetadata(contentType: 'image/png'));
 
     try {
-      uploading = true;
+      brUploading = true;
       notifyListeners();
 
       TaskSnapshot snapshot = await uploadTask;
@@ -108,12 +109,12 @@ class AdminProvider extends ChangeNotifier {
       Fluttertoast.showToast(msg: 'Data uploaded');
       Navigator.of(context).pop(); // Close the current screen
 
-      uploading = false; // Set uploading to false after successful upload
+      brUploading = false; // Set uploading to false after successful upload
       notifyListeners();
     } catch (error) {
       // Handle error
       print('Error uploading data: $error');
-      uploading = false; // Set uploading to false if an error occurs
+      brUploading = false; // Set uploading to false if an error occurs
       notifyListeners();
       // Show error message or handle error as needed
       Fluttertoast.showToast(msg: 'Error uploading data. Please try again.');

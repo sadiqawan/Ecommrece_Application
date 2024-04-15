@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommrece_application/controls/providers/user_profile_provider.dart';
 import 'package:ecommrece_application/views/admin_screen.dart';
+import 'package:ecommrece_application/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../modes/custom_wedgits/profile_show_name_container.dart';
-import 'login_screen.dart';
+
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -19,7 +20,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Column(
@@ -31,25 +32,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            Consumer<UserProfileProvider>(builder: (context, value, child) {
-              return Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: (value.showLocalImage && value.chosenImage != null)
-                    ? Image.file(value.chosenImage!, fit: BoxFit.cover)
-                    : ((value.userSnapshot != null &&
-                            value.userSnapshot!['photo'] != null)
-                        ? Image.network(
-                            value.userSnapshot!['photo'] as String,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            'images/person.jpg')), // Display an empty container if no image is available
-              );
-            }),
+            StreamBuilder<DocumentSnapshot>(
+              stream: context.watch<UserProfileProvider>().userSnapshotStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(color: Colors.black); // Placeholder while loading
+                }
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}'); // Handle error state
+                }
+                final value = snapshot.data;
+                return Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: (value != null && value['photo'] != null)
+                      ? Image.network(
+                    value['photo'] as String,
+                    fit: BoxFit.cover,
+                  )
+                      : Image.asset(
+                    'images/person.jpg',
+                    fit: BoxFit.cover,
+                  ), // Display an empty container if no image is available
+                );
+              },
+            ),
+
             const SizedBox(height: 16),
             InkWell(
               onTap: () {
@@ -85,25 +96,28 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 );
               },
               child: Container(
-                  height: 40,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Consumer<UserProfileProvider>(
-                      builder: (context, value, child) {
+                height: 40,
+                width: 100,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Consumer<UserProfileProvider>(
+                  builder: (context, value, child) {
                     return Center(
-                        child: value.showLocalImage
-                            ? const Text(
-                                'UPDATE PIC',
-                                style: TextStyle(color: Colors.white),
-                              )
-                            : const Text(
-                                'UPLOAD PIC',
-                                style: TextStyle(color: Colors.white),
-                              ));
-                  })),
+                      child: value.showLocalImage
+                          ? const Text(
+                        'UPDATE PIC',
+                        style: TextStyle(color: Colors.white),
+                      )
+                          : const Text(
+                        'UPLOAD PIC',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             Consumer<UserProfileProvider>(
@@ -191,9 +205,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     return AlertDialog(
                       title: const Text("Confirm Delete"),
                       content: const Text(
-                          "Are you sure you want to delete your account?"),
+                          "Are you sure you want to delete your account?"
+                      ),
                       actions: [
-
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog
@@ -203,15 +217,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         TextButton(
                           onPressed: () {
                             // Call the method to delete the user account
-                            context
-                                .read<UserProfileProvider>()
-                                .getUserDelete();
-                            Navigator.of(context).pop(); // Close the dialog
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
+                            context.read<UserProfileProvider>().getUserDelete();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).popUntil((route) => route.isFirst);
                             Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );// Close the dialog
                           },
                           child: const Text("Delete"),
                         ),
@@ -235,6 +248,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               ),
             ),
+
           ],
         ),
       ),
