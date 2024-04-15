@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 class AdminProvider extends ChangeNotifier {
   late File? productImage;
+  late File? brandLogo;
   late bool uploading = false;
 
 
@@ -16,6 +17,17 @@ class AdminProvider extends ChangeNotifier {
 
     if (xFile == null) return;
     productImage = File(xFile.path);
+    notifyListeners();
+  }
+
+  // for brand to image picker
+
+  Future<void> pickImageFromForBra(ImageSource imageSource) async {
+    // Pick image from image source
+    XFile? xFile = await ImagePicker().pickImage(source: imageSource);
+
+    if (xFile == null) return;
+    brandLogo = File(xFile.path);
     notifyListeners();
   }
 
@@ -44,6 +56,52 @@ class AdminProvider extends ChangeNotifier {
         'name': titleC.trim(),
         'price': priceC.trim(),
         'discreption': desC.trim(), // corrected spelling here
+        'image': productUrl,
+      });
+
+      Fluttertoast.showToast(msg: 'Data uploaded');
+      Navigator.of(context).pop(); // Close the current screen
+
+      uploading = false; // Set uploading to false after successful upload
+      notifyListeners();
+    } catch (error) {
+      // Handle error
+      print('Error uploading data: $error');
+      uploading = false; // Set uploading to false if an error occurs
+      notifyListeners();
+      // Show error message or handle error as needed
+      Fluttertoast.showToast(msg: 'Error uploading data. Please try again.');
+    }
+  }
+
+
+
+ // for uploading task of Brands
+
+  Future<void> uploadBrandTask(BuildContext context, String brandName,
+      String brandDesC) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+
+    var fileName = '${brandName.trim()}.png';
+
+    UploadTask uploadTask = storage
+        .ref()
+        .child(fileName)
+        .putFile(brandLogo!, SettableMetadata(contentType: 'image/png'));
+
+    try {
+      uploading = true;
+      notifyListeners();
+
+      TaskSnapshot snapshot = await uploadTask;
+
+      String productUrl = await snapshot.ref.getDownloadURL();
+      // print(productUrl);
+
+      await FirebaseFirestore.instance.collection('brands').add({
+        'name': brandName.trim(),
+        'description': brandDesC.trim(),
         'image': productUrl,
       });
 

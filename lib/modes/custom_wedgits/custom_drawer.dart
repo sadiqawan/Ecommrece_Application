@@ -9,21 +9,22 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.black12.withOpacity(0.8),
         child: ListView(
       children: [
         DrawerHeader(
           child: Container(
-            color: Colors.black,
+            color: Colors.white,
             child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.shopping_basket_outlined,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 Text(
                   'bagzz',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),
                 )
               ],
             ),
@@ -33,16 +34,16 @@ class CustomDrawer extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          leading: const Icon(Icons.home_filled),
-          title: const Text('Home'),
+          leading: const Icon(Icons.home_filled,color: Colors.white,),
+          title: const Text('Home',style: TextStyle(color: Colors.white),),
         ),
         const ListTile(
-          leading: Icon(Icons.phone),
-          title: Text('Contact'),
+          leading: Icon(Icons.phone,color: Colors.white,),
+          title: Text('Contact',style: TextStyle(color: Colors.white),),
         ),
         const ListTile(
-          leading: Icon(Icons.email_outlined),
-          title: Text('Email'),
+          leading: Icon(Icons.email_outlined,color: Colors.white,),
+          title: Text('Email',style: TextStyle(color: Colors.white),),
         ),
         ListTile(
           onTap: () {
@@ -77,8 +78,8 @@ class CustomDrawer extends StatelessWidget {
               },
             );
           },
-          leading: const Icon(Icons.logout),
-          title: const Text('LogOut'),
+          leading: const Icon(Icons.logout,color: Colors.white,),
+          title: const Text('LogOut' ,style: TextStyle(color: Colors.white),),
         ),
       ],
     ));

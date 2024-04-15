@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommrece_application/controls/providers/customer_home_provider.dart';
 import 'package:ecommrece_application/controls/providers/favourite_provider.dart';
 import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
+import 'package:ecommrece_application/views/all_categries_list_screen.dart';
+import 'package:ecommrece_application/views/categori_detail_screen.dart';
 import 'package:ecommrece_application/views/customer_shopping_screen.dart';
 import 'package:ecommrece_application/views/products_list.dart';
 import 'package:ecommrece_application/views/user_profile_screen.dart';
@@ -45,14 +47,24 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
           'bagzz',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [IconButton(onPressed: (){
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const UserProfileScreen()),
-          );
-                }, icon: const Icon(Icons.person,size: 45,)), const SizedBox(width: 10,)],
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const UserProfileScreen()),
+                );
+              },
+              icon: const Icon(
+                Icons.person,
+                size: 45,
+              )),
+          const SizedBox(
+            width: 10,
+          )
+        ],
       ),
       drawer: const CustomDrawer(),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(13.0),
@@ -117,28 +129,31 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
               Consumer<CustomerHomeProvider>(
                 builder: (context, value, child) {
                   if (value.products == null || value.products!.isEmpty) {
-                    return const  SpinKitSpinningLines(
+                    return const SpinKitSpinningLines(
                         color: Colors
                             .white); // Return empty container if no products
                   } else {
                     return CarouselSlider(
                       items: value.products!.map((product) {
-                        int index = value.products!.indexOf(product); // Get the index of the current product
+                        int index = value.products!.indexOf(
+                            product); // Get the index of the current product
                         return Builder(
                           builder: (BuildContext context) {
                             return InkWell(
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => ProductDetailsScreen(
-                                      image: product['image'],
-                                      price: product['price'].toString(),
-                                      description: product['discreption'],
-                                    )));
+                                          image: product['image'],
+                                          price: product['price'].toString(),
+                                          description: product['discreption'],
+                                        )));
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: const BoxDecoration(color: Colors.black12),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                decoration:
+                                    const BoxDecoration(color: Colors.black12),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -157,12 +172,17 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                     const SizedBox(height: 5),
                                     TextButton(
                                       onPressed: () {
-                                        context.read<ShoppingCardProvider>().setCardItems(
-                                          index, // Use the index obtained above
-                                          product['image'],
-                                          product['name'].toString(),
-                                        );
-                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CustomerShoppingScreen()));
+                                        context
+                                            .read<ShoppingCardProvider>()
+                                            .setCardItems(
+                                              index, // Use the index obtained above
+                                              product['image'],
+                                              product['name'].toString(),
+                                            );
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CustomerShoppingScreen()));
                                       },
                                       child: const Text(
                                         'SHOP NOW',
@@ -190,7 +210,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         enableInfiniteScroll: true,
                         autoPlay: true,
                         autoPlayInterval: const Duration(seconds: 3),
-                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
                         autoPlayCurve: Curves.fastOutSlowIn,
                         enlargeCenterPage: true,
                         enlargeStrategy: CenterPageEnlargeStrategy.scale,
@@ -202,104 +223,117 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
               const Gap(20),
 
-
-          Consumer<CustomerHomeProvider>(
-            builder: (context, provider, child) {
-              if (provider.products == null) {
-                return const Center(
-                  child: SpinKitSpinningLines(color: Colors.black),
-                ); // Show loading indicator while fetching data
-              } else if (provider.products!.isEmpty) {
-                return const Center(
-                  child: Text('No products found'),
-                ); // Show message if there are no products
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 4,
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                    ),
-                    itemBuilder: (context, index) {
-                      final product = provider.products![index];
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ProductDetailsScreen(
-                            image: product['image'],
-                            price: product['price'].toString(),
-                            description: product['discreption'],
-                          )));
-                        },
-                        child: Center(
-                          child: Stack(
-                            children: [
-                              Container(
-                                color: Colors.black12,
-                                child: Column(
-                                  children: [
-                                    Image.network(
-                                      product['image'],
-                                      height: 120,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+              Consumer<CustomerHomeProvider>(
+                builder: (context, provider, child) {
+                  if (provider.products == null) {
+                    return const Center(
+                      child: SpinKitSpinningLines(color: Colors.black),
+                    ); // Show loading indicator while fetching data
+                  } else if (provider.products!.isEmpty) {
+                    return const Center(
+                      child: Text('No products found'),
+                    ); // Show message if there are no products
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 4,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          final product = provider.products![index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ProductDetailsScreen(
+                                        image: product['image'],
+                                        price: product['price'].toString(),
+                                        description: product['discreption'],
+                                      )));
+                            },
+                            child: Center(
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    color: Colors.black12,
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          ' ${product['name'].toString()}',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
+                                        Image.network(
+                                          product['image'],
+                                          height: 120,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              ' ${product['name'].toString()}',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Consumer<FavouriteProvider>(
-                                  builder: (context, value, child) {
-                                    return IconButton(
-                                      onPressed: () {
-                                        if (value.favouriteItems.any((item) => item.index == index)) {
-                                          context.read<FavouriteProvider>().removeFavouriteItem(index);
-                                        } else {
-                                          // Ensure to pass the correct image and name parameters
-                                          context.read<FavouriteProvider>().setFavouriteItem(index, product['image'], product['name']);
-                                        }
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: Consumer<FavouriteProvider>(
+                                      builder: (context, value, child) {
+                                        return IconButton(
+                                          onPressed: () {
+                                            if (value.favouriteItems.any(
+                                                (item) =>
+                                                    item.index == index)) {
+                                              context
+                                                  .read<FavouriteProvider>()
+                                                  .removeFavouriteItem(index);
+                                            } else {
+                                              // Ensure to pass the correct image and name parameters
+                                              context
+                                                  .read<FavouriteProvider>()
+                                                  .setFavouriteItem(
+                                                      index,
+                                                      product['image'],
+                                                      product['name']);
+                                            }
+                                          },
+                                          icon: Icon(
+                                            value.favouriteItems.any((item) =>
+                                                    item.index == index)
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: value.favouriteItems.any(
+                                                    (item) =>
+                                                        item.index == index)
+                                                ? Colors.black
+                                                : null,
+                                          ),
+                                        );
                                       },
-                                      icon: Icon(
-                                        value.favouriteItems.any((item) => item.index == index)
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: value.favouriteItems.any((item) => item.index == index)
-                                            ? Colors.black
-                                            : null,
-                                      ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
-            },
-          ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
 
-          const Gap(20),
+              const Gap(20),
 
               Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -307,7 +341,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     text: 'CHECK ALL LATEST',
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const  ProductsListScreen() ));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ProductsListScreen()));
                     }),
               ),
               const Gap(20),
@@ -356,21 +391,38 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           return Center(
                             child: Stack(
                               children: [
-                                Container(
-                                  color: Colors.black12,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 150,
-                                        width: 130,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: NetworkImage(brand['image']),
-                                            fit: BoxFit.cover,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CategoriesDetailScreen(
+                                                  image:
+                                                      brand['image'].toString(),
+                                                  name:
+                                                      brand['name'].toString(),
+                                                  description: '',
+                                                ),
+                                        ),
+                                    );
+                                  },
+                                  child: Container(
+                                    color: Colors.black12,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 150,
+                                          width: 130,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image:
+                                                  NetworkImage(brand['image']),
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Positioned(
@@ -408,7 +460,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                 child: CustomButton(
                     text: 'BROWSE ALL CATEGORIES',
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    onTap: () {}),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              const AllCategoriesListScreen()));
+                    }),
               ),
               const Gap(15),
             ],

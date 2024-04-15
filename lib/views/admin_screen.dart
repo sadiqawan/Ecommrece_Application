@@ -12,13 +12,16 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminState extends State<AdminScreen> {
-  TextEditingController? titleC, desC, priceC;
+  TextEditingController? titleC, desC, priceC,brandNameC,brandDesC;
 
   @override
   void initState() {
     titleC = TextEditingController();
     desC = TextEditingController();
     priceC = TextEditingController();
+    brandNameC = TextEditingController();
+    brandDesC = TextEditingController();
+
     super.initState();
   }
 
@@ -27,6 +30,8 @@ class _AdminState extends State<AdminScreen> {
     titleC!.dispose();
     desC!.dispose();
     priceC!.dispose();
+    brandNameC!.dispose();
+    brandDesC!.dispose();
     super.dispose();
   }
 
@@ -41,6 +46,8 @@ class _AdminState extends State<AdminScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
+              const Text('Upload Products',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            const  SizedBox(height: 20,),
               TextField(
                 controller: titleC,
                 decoration: const InputDecoration(
@@ -168,6 +175,133 @@ class _AdminState extends State<AdminScreen> {
                   ),
                 ),
               ),
+
+
+
+              const  SizedBox(height: 25,),
+
+              const Text('Upload Brands',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              const  SizedBox(height: 20,),
+
+              const  SizedBox(height: 20,),
+              TextField(
+                controller: brandNameC,
+                decoration: const InputDecoration(
+                  hintText: 'Name',
+                  border: OutlineInputBorder(),
+                  labelText: 'Brand Name',
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: brandDesC,
+                decoration: const InputDecoration(
+                  hintText: 'Description',
+                  border: OutlineInputBorder(),
+                  labelText: ' Brand Description',
+                ),
+                maxLines: 4,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+
+              IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.camera_alt),
+                            title: const Text('From Camera'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              context
+                                  .read<AdminProvider>()
+                                  .pickImageFromForBra(ImageSource.camera);
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.photo),
+                            title: const Text('From Gallery'),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              context
+                                  .read<AdminProvider>()
+                                  .pickImageFromForBra(ImageSource.gallery);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(
+                  Icons.attach_file,
+                  size: 50,
+                ),
+              ),
+              const Text('Attach Logo'),
+
+              const SizedBox(
+                height: 15,
+              ),
+
+              InkWell(
+                onTap: () {
+                  if (brandNameC != null && brandDesC != null) {
+                    String title = brandNameC!.text.toString().trim();
+                    String description = brandDesC!.text.toString().trim();
+
+                    if (title.isNotEmpty &&
+                        description.isNotEmpty) {
+                      context.read<AdminProvider>().uploadBrandTask(
+                        context,
+                        title,
+                        description,
+                      );
+                    } else {
+                      Fluttertoast.showToast(msg: 'Please fill in all fields');
+                    }
+                  } else {
+                    Fluttertoast.showToast(msg: 'Please fill in all fields');
+                  }
+                },
+                child: Container(
+                  height: 40,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Container(
+                    height: 40,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: context.watch<AdminProvider>().uploading
+                          ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                          : const Text(
+                        'Upload',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+
+
             ],
           ),
         ),

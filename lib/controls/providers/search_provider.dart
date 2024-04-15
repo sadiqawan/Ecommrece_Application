@@ -32,7 +32,7 @@ class SearchProvider extends ChangeNotifier {
     subscription = FirebaseFirestore.instance
         .collection('products')
         .where('name', isGreaterThanOrEqualTo: searchTermLowerCase)
-        .where('name', isLessThanOrEqualTo: '$searchTermLowerCase\uf8ff')
+          .where('name', isLessThanOrEqualTo: searchTermUpperCase + '\uf8ff')
         .snapshots()
         .listen((snapshot) {
       _controller.add(snapshot.docs);
