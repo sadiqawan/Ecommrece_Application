@@ -31,11 +31,29 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.network(
-                  widget.image, // Accessing image from the widget's properties
-                  height: 300, // Adjust height as needed
-                  width: 300, // Adjust width as needed
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 10,
+                        blurRadius: 10,
+                        offset: const Offset(0, 6), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(widget.image),
+                    radius: 150,
+                  ),
                 ),
+
+                // Image.network(
+                //   // Accessing image from the widget's properties
+                //   height: 300, // Adjust height as needed
+                //   width: 300, // Adjust width as needed
+                // ),
                 const SizedBox(height: 15),
                 Text(
                   widget.name, // Accessing name from the widget's properties

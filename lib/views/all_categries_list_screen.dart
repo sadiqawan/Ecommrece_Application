@@ -52,17 +52,18 @@ class _AllCategoriesListScreenState extends State<AllCategoriesListScreen> {
                               width: double.infinity,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                boxShadow: const [
+                                boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black45,
-                                    blurRadius: 4,
-                                    spreadRadius: 2,
-                                    offset: Offset(4, 8), // Shadow position
+                                    color: Colors.grey.withOpacity(0.5), // Change this color to your preference
+                                    spreadRadius: 12,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 5), // changes position of shadow
                                   ),
                                 ],
                                 color: Colors.black12.withOpacity(0.4),
                               ),
                             ),
+
                           ],
                         ),
                       ),
