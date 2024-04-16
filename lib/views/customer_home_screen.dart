@@ -379,7 +379,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: value.brands!.length,
+                        itemCount: 4 ,
+                        // value.brands!.length
                         gridDelegate:
                             const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 200,
@@ -454,18 +455,21 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   }
                 },
               ),
-              const Gap(15),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: CustomButton(
-                    text: 'BROWSE ALL CATEGORIES',
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              const AllCategoriesListScreen()));
-                    }),
-              ),
+              Consumer<CustomerHomeProvider>(builder: (context, value, child){
+                 return Padding(
+                   padding: const EdgeInsets.all(15.0),
+                   child: CustomButton(
+                       text: 'BROWSE ALL CATEGORIES',
+                       textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                       onTap: () {
+                         Navigator.of(context).push(MaterialPageRoute(
+                             builder: (context) =>
+                             const AllCategoriesListScreen()));
+                       }),
+                 );
+               }),
+               const Gap(15),
+
               const Gap(15),
             ],
           ),

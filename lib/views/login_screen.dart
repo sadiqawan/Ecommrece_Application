@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
                                 context.read<LoginProvider>().logIn(
-                                    emailC!.text.trim(), passwordC!.text.trim());
+                                    emailC!.text.trim(), passwordC!.text.trim(),context);
                                 if (value.emailVarify) {
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(

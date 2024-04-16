@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommrece_application/views/signup_screen.dart';
 
 // import 'package:ecommrece_application/views/new_password_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,26 +50,48 @@ class LoginProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> logIn(String email, String password) async {
+  Future<void> logIn(String email, String password, BuildContext context) async {
     try {
       isLoading = true;
       notifyListeners();
       FirebaseAuth auth = FirebaseAuth.instance;
-      emailVarify = auth.currentUser!.emailVerified;
+      if (auth.currentUser != null) {
+        emailVarify = auth.currentUser!.emailVerified;
+      }
       await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      Fluttertoast.showToast(
-        msg: 'Login Failed: ${e.message}',
-        backgroundColor: Colors.red,
-      );
+      if (e.code == 'user-not-found') {
+        Fluttertoast.showToast(
+          msg: 'User not found. Please create an account.',
+          backgroundColor: Colors.red,
+        );
+        // Navigate to the signup screen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const SignUpScreen(),
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        Fluttertoast.showToast(
+          msg: 'Incorrect password. Please try again.',
+          backgroundColor: Colors.red,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Login Failed: ${e.message}',
+          backgroundColor: Colors.red,
+        );
+      }
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
+
+
 
   void logOut() async {
     await FirebaseAuth.instance.signOut();
