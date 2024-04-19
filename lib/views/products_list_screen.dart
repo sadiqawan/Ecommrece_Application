@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-
 import '../controls/providers/customer_home_provider.dart';
-
 import '../controls/providers/shopping_card_provider.dart';
 import '../modes/custom_wedgits/add_to_card_button.dart';
 
@@ -99,8 +97,8 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                                       index,
                                       product['image'].toString(),
                                       product['name'].toString(),
+                                      product['price'].toString(),
                                     );
-
                                 Fluttertoast.showToast(
                                   msg: 'Added To Card',
                                   toastLength: Toast.LENGTH_SHORT,

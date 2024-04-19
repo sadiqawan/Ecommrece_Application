@@ -113,7 +113,9 @@ class _CustomerFavoriteScreenState extends State<CustomerFavoriteScreen> {
                                                 .setCardItems(
                                                 value.favouriteItems[index].index,
                                                 value.favouriteItems[index].image,
-                                                value.favouriteItems[index].name);
+                                                value.favouriteItems[index].name,
+                                                value.favouriteItems[index].price
+                                            );
 
                                             Fluttertoast.showToast(
                                                 msg: 'Added To Card',

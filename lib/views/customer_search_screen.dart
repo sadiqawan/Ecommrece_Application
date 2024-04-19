@@ -74,7 +74,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                           trailing: ElevatedButton(
                             onPressed: () {
                               context.read<ShoppingCardProvider>().setCardItems(
-                                  index, doc['image'], doc['name']);
+                                  index, doc['image'], doc['name'], doc['price']);
 
                               Fluttertoast.showToast(
                                 msg: 'Added To Card',

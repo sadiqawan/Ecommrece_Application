@@ -5,7 +5,7 @@ import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
 import 'package:ecommrece_application/views/all_categries_list_screen.dart';
 import 'package:ecommrece_application/views/categori_detail_screen.dart';
 import 'package:ecommrece_application/views/customer_shopping_screen.dart';
-import 'package:ecommrece_application/views/products_list.dart';
+import 'package:ecommrece_application/views/products_list_screen.dart';
 import 'package:ecommrece_application/views/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +14,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../controls/providers/shopping_card_provider.dart';
@@ -146,7 +147,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                           image: product['image'],
                                           price: product['price'].toString(),
                                           description: product['discreption'],
-                                        )));
+                                      name: product['name'],
+                                      index: index,
+                                        ),
+                                ),
+                                );
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
@@ -178,6 +183,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                               index, // Use the index obtained above
                                               product['image'],
                                               product['name'].toString(),
+                                              product['price'].toString(),
                                             );
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
@@ -255,6 +261,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                         image: product['image'],
                                         price: product['price'].toString(),
                                         description: product['discreption'],
+                                        name: product['name'],
+                                    index: index,
+
                                       )));
                             },
                             child: Center(
@@ -304,7 +313,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                                   .setFavouriteItem(
                                                       index,
                                                       product['image'],
-                                                      product['name']);
+                                                      product['name'],
+                                                      product['price']
+                                              );
                                             }
                                           },
                                           icon: Icon(
@@ -341,8 +352,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     text: 'CHECK ALL LATEST',
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ProductsListScreen()));
+                      Navigator.of(context).push(PageTransition(
+                        duration: const Duration(milliseconds: 600),
+                        type: PageTransitionType.bottomToTop,
+                        child: const ProductsListScreen(),
+                      ));
+
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => const ProductsListScreen()));
                     }),
               ),
               const Gap(20),
@@ -462,9 +479,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                        text: 'BROWSE ALL CATEGORIES',
                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
                        onTap: () {
-                         Navigator.of(context).push(MaterialPageRoute(
-                             builder: (context) =>
-                             const AllCategoriesListScreen()));
+                         Navigator.of(context).push(PageTransition(
+                           duration: const Duration(milliseconds: 600),
+                           type: PageTransitionType.bottomToTop,
+                           child: const AllCategoriesListScreen(),
+                         ));
+                         // Navigator.of(context).push(MaterialPageRoute(
+                         //     builder: (context) =>
+                         //     const AllCategoriesListScreen()));
                        }),
                  );
                }),

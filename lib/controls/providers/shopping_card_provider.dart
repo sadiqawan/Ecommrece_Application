@@ -8,8 +8,8 @@ class ShoppingCardProvider extends ChangeNotifier{
 
 
 
-  void setCardItems(index, image, name){
-    cardItems.add(ShoppingCardItem( name: name, image: image, index: index));
+  void setCardItems(index, image, name , price){
+    cardItems.add(ShoppingCardItem( name: name, image: image, index: index, price: price));
     notifyListeners();
 
   }

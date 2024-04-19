@@ -21,6 +21,7 @@ class _CustomerShoppingScreenState extends State<CustomerShoppingScreen> {
   String os = Platform.operatingSystem;
 
   var applePayButton = ApplePayButton(
+
     paymentConfiguration:
     PaymentConfiguration.fromJsonString(defaultApplePay),
     paymentItems: const [
@@ -42,33 +43,36 @@ class _CustomerShoppingScreenState extends State<CustomerShoppingScreen> {
     margin: const EdgeInsets.only(top: 15.0),
     onPaymentResult: (result) => debugPrint(' Payment Result $result'),
     loadingIndicator: const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(color: Colors.black,),
     ),
   );
 
-  var googlePayButton = GooglePayButton(
-      paymentConfiguration:
-      PaymentConfiguration.fromJsonString(defaultGooglePay),
-      paymentItems: const [
-        PaymentItem(
-            label: 'Item 1',
-            amount: '200',
-            status: PaymentItemStatus.final_price),
-        PaymentItem(
-            label: 'Item 3',
-            amount: '200',
-            status: PaymentItemStatus.final_price),
-        PaymentItem(
-            label: 'Item 4',
-            amount: '200',
-            status: PaymentItemStatus.final_price),
-      ],
-      type: GooglePayButtonType.buy,
-      margin: const EdgeInsets.only(top: 15.0),
-      onPaymentResult: (result) => debugPrint(' Payment Result $result'),
-      loadingIndicator: const Center(
-        child: CircularProgressIndicator(),
-      ));
+  var googlePayButton = Builder(
+    builder: (context) {
+      var cardItems = context.watch<ShoppingCardProvider>().cardItems;
+      var paymentItems = cardItems.map((item) {
+        return PaymentItem(
+          label: item.name,
+          amount: item.price.toString(),
+          status: PaymentItemStatus.final_price,
+        );
+      }).toList();
+
+      return GooglePayButton(
+        paymentConfiguration: PaymentConfiguration.fromJsonString(defaultGooglePay),
+        paymentItems: paymentItems,
+        theme: GooglePayButtonTheme.dark,
+        type: GooglePayButtonType.buy,
+        margin: const EdgeInsets.only(top: 15.0),
+        onPaymentResult: (result) => debugPrint('Payment Result $result'),
+        loadingIndicator: const Center(
+          child: CircularProgressIndicator( color: Colors.black,),
+        ),
+      );
+    },
+  );
+
+
 
 
   @override
@@ -170,6 +174,7 @@ class _CustomerShoppingScreenState extends State<CustomerShoppingScreen> {
                         ),
                       ),
                       Platform.isIOS ? applePayButton : googlePayButton
+
                     ],
                   );
                 }
@@ -181,3 +186,4 @@ class _CustomerShoppingScreenState extends State<CustomerShoppingScreen> {
     );
   }
 }
+
