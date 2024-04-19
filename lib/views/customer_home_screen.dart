@@ -6,6 +6,7 @@ import 'package:ecommrece_application/views/all_categries_list_screen.dart';
 import 'package:ecommrece_application/views/categori_detail_screen.dart';
 import 'package:ecommrece_application/views/customer_shopping_screen.dart';
 import 'package:ecommrece_application/views/products_list_screen.dart';
+import 'package:ecommrece_application/views/shopp_now_screen.dart';
 import 'package:ecommrece_application/views/user_profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -142,16 +143,27 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                           builder: (BuildContext context) {
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ProductDetailsScreen(
-                                          image: product['image'],
-                                          price: product['price'].toString(),
-                                          description: product['discreption'],
-                                      name: product['name'],
-                                      index: index,
-                                        ),
-                                ),
-                                );
+                                Navigator.of(context).push(PageTransition(
+                                  duration: const Duration(milliseconds: 600),
+                                  type: PageTransitionType.leftToRight,
+                                  child:  ProductDetailsScreen(
+                                    image: product['image'],
+                                    price: product['price'].toString(),
+                                              description: product['discreption'],
+                                          name: product['name'],
+                                          index: index,
+                                  ),
+                                ));
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => ProductDetailsScreen(
+                                //           image: product['image'],
+                                //           price: product['price'].toString(),
+                                //           description: product['discreption'],
+                                //       name: product['name'],
+                                //       index: index,
+                                //         ),
+                                // ),
+                                // );
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
@@ -186,9 +198,11 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                               product['price'].toString(),
                                             );
                                         Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const CustomerShoppingScreen()));
+                                            PageTransition(
+                                              duration: const Duration(milliseconds: 800),
+                                              type: PageTransitionType.leftToRight,
+                                              child: const ShoppNow(),
+                                            ));
                                       },
                                       child: const Text(
                                         'SHOP NOW',
@@ -479,7 +493,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                        text: 'BROWSE ALL CATEGORIES',
                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
                        onTap: () {
-                         Navigator.of(context).push(PageTransition(
+                         Navigator.of(context).push(
+                             PageTransition(
                            duration: const Duration(milliseconds: 600),
                            type: PageTransitionType.bottomToTop,
                            child: const AllCategoriesListScreen(),
