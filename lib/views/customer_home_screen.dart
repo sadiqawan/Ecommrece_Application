@@ -4,7 +4,7 @@ import 'package:ecommrece_application/controls/providers/favourite_provider.dart
 import 'package:ecommrece_application/modes/custom_wedgits/custom_button.dart';
 import 'package:ecommrece_application/views/all_categries_list_screen.dart';
 import 'package:ecommrece_application/views/categori_detail_screen.dart';
-import 'package:ecommrece_application/views/customer_shopping_screen.dart';
+
 import 'package:ecommrece_application/views/products_list_screen.dart';
 import 'package:ecommrece_application/views/shopp_now_screen.dart';
 import 'package:ecommrece_application/views/user_profile_screen.dart';
@@ -52,10 +52,13 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const UserProfileScreen()),
-                );
+                Navigator.push(context, PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    duration: const Duration(milliseconds: 1000), child: const UserProfileScreen()));
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //       builder: (context) => const UserProfileScreen()),
+                // );
               },
               icon: const Icon(
                 Icons.person,

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Bagzz',
+        title: 'bagzz',
         theme: ThemeData(
           fontFamily: GoogleFonts.playfairDisplay().toString(),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -66,17 +66,22 @@ class MyApp extends StatelessWidget {
               );
             }
             final user = snapshot.data;
-            if (user == null) {
-              // If no user is logged in, show the LoginScreen.
-              return const LoginScreen();
-            } else if (user.emailVerified) {
-              // If the user is logged in and their email is verified, show the SplashScreen.
-              return const SplashScreen();
-            } else {
-              // If the user is logged in but their email is not verified, show the Verification.
-              return const VerificationScreen();
+            if (user != null && user.emailVerified) {
+               return const SplashScreen();
+                } else {
+               return const LoginScreen();
+    }
+            // if (user == null) {
+            //   // If no user is logged in, show the LoginScreen.
+            //   return const LoginScreen();
+            // } else if (user.emailVerified) {
+            //   // If the user is logged in and their email is verified, show the SplashScreen.
+            //   return const SplashScreen();
+            // } else {
+            //   // If the user is logged in but their email is not verified, show the Verification.
+            //   return const VerificationScreen();
             }
-          },
+
         ),
       )
 
@@ -105,3 +110,4 @@ class MyApp extends StatelessWidget {
 // }
 // },
 // ),
+

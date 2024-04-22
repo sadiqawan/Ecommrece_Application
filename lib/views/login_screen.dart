@@ -5,6 +5,7 @@ import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:ecommrece_application/views/verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -93,17 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (_formKey.currentState!.validate()) {
                                 context.read<LoginProvider>().logIn(
                                     emailC!.text.trim(), passwordC!.text.trim(),context);
-                                if (value.emailVarify) {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                          const HomeScreen()));
-                                } else {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                          const VerificationScreen()));
-                                }
                               }
                             },
                             child: Container(

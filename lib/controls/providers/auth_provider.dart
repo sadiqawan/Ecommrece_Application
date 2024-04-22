@@ -5,6 +5,10 @@ import 'package:ecommrece_application/views/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:page_transition/page_transition.dart';
+
+import '../../views/home_screen.dart';
+import '../../views/verification_screen.dart';
 
 class LoginProvider extends ChangeNotifier {
   bool isLoading = false;
@@ -55,6 +59,7 @@ class LoginProvider extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
       FirebaseAuth auth = FirebaseAuth.instance;
+      // Check if currentUser is not null before accessing its properties
       if (auth.currentUser != null) {
         emailVarify = auth.currentUser!.emailVerified;
       }
@@ -62,6 +67,24 @@ class LoginProvider extends ChangeNotifier {
         email: email,
         password: password,
       );
+      if (emailVarify = true) {
+          Navigator.push(context, PageTransition(
+              type: PageTransitionType.leftToRight,
+              duration: const Duration(milliseconds: 1300), child: const HomeScreen()));
+        //
+        //   // Navigator.of(context).pushReplacement(
+        //   //     MaterialPageRoute(
+        //   //         builder: (context) =>
+        //   //         const HomeScreen()));
+        } else {
+          Navigator.push(context, PageTransition(
+              type: PageTransitionType.leftToRight, duration: const Duration(milliseconds: 1300), child: const VerificationScreen()));
+
+        //   // Navigator.of(context).push(
+        //   //     MaterialPageRoute(
+        //   //         builder: (context) =>
+        //   //         const VerificationScreen()));
+        }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Fluttertoast.showToast(
@@ -69,11 +92,13 @@ class LoginProvider extends ChangeNotifier {
           backgroundColor: Colors.red,
         );
         // Navigate to the signup screen
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const SignUpScreen(),
-          ),
-        );
+        Navigator.push(context, PageTransition(
+            type: PageTransitionType.leftToRight, duration: const Duration(seconds: 1), child: const SignUpScreen()));
+        // Navigator.of(context).pushReplacement(
+        //   MaterialPageRoute(
+        //     builder: (context) => const SignUpScreen(),
+        //   ),
+        // );
       } else if (e.code == 'wrong-password') {
         Fluttertoast.showToast(
           msg: 'Incorrect password. Please try again.',
@@ -90,6 +115,7 @@ class LoginProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
 
